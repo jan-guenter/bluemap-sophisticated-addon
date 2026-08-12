@@ -54,19 +54,33 @@ final class BlockMaterialResolver {
         int tintArgb = tint.getInt() | 0xFF00_0000;
         ResolvedBlockMaterial resolved = null;
         for (Variant variant : variants) {
-            if (variant.isTransformed()) {
-                return Optional.empty();
-            }
             Optional<ResolvedBlockMaterial> candidate = resolveVariant(variant, tintArgb);
             if (candidate.isEmpty()) {
                 return Optional.empty();
             }
-            if (resolved != null && !resolved.equals(candidate.orElseThrow())) {
+            ResolvedBlockMaterial candidateMaterial = candidate.orElseThrow();
+            if (variant.isTransformed() && !canIgnoreTransform(candidateMaterial)) {
                 return Optional.empty();
             }
-            resolved = candidate.orElseThrow();
+            if (resolved != null && !resolved.equals(candidateMaterial)) {
+                return Optional.empty();
+            }
+            resolved = candidateMaterial;
         }
         return Optional.ofNullable(resolved);
+    }
+
+    static boolean canIgnoreTransform(ResolvedBlockMaterial material) {
+        ResolvedBlockMaterial.Face reference = material.face(Direction.DOWN);
+        if (reference == null) {
+            return false;
+        }
+        for (Direction direction : Direction.values()) {
+            if (!reference.equals(material.face(direction))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Optional<ResolvedBlockMaterial> resolveVariant(Variant variant, int tintArgb) {
