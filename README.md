@@ -7,7 +7,7 @@ Sophisticated Storage and Sophisticated Backpacks.
 
 ## Status and compatibility
 
-This is an unreleased review candidate for one environment:
+Version `0.1.0-alpha.1` is the owner-accepted prerelease for one environment:
 
 - All the Mons `1.2.0`, Minecraft `1.21.1`, NeoForge `21.1.248`, Java `21`;
 - BlueMap backport `5.22-agent.backport-5.22-mc1.21.1-2` at

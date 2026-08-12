@@ -1,7 +1,7 @@
 # Visual coverage
 
-This document defines the review candidate's positive scope. It is not a
-record of runtime or human visual acceptance.
+This document defines the accepted prerelease's positive scope. Acceptance is
+bounded to the exact identities in the compatibility and provenance records.
 
 ## Sophisticated Storage
 
