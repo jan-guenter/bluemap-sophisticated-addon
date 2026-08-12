@@ -209,7 +209,8 @@ final class SophisticatedRenderer implements BlockRenderer {
         overrides.put("bottom", key("sophisticatedstorage:block/" + wood + "_barrel_bottom"));
         aliasBarrelTextures(overrides);
 
-        if (!applyBarrelCamos(snapshot, overrides)) {
+        Map<String, ResolvedBlockMaterial> materialOverrides = new HashMap<>();
+        if (!applyBarrelCamos(snapshot, block, materialOverrides)) {
             return false;
         }
         int main = color(snapshot.mainColor(), WHITE);
@@ -217,7 +218,19 @@ final class SophisticatedRenderer implements BlockRenderer {
         float xRotation = barrelXRotation(block, limited > 0);
         float yRotation = horizontalRotation(block);
         boolean emitted;
-        if (snapshot.barrelMaterials().isEmpty()) {
+        boolean partitioned = !snapshot.barrelMaterials().isEmpty();
+        if (partitioned && flat && limited > 1) {
+            emitted = emitFlatLimitedStaticParts(
+                    limited,
+                    block,
+                    target,
+                    xRotation,
+                    yRotation,
+                    overrides,
+                    materialOverrides,
+                    mapColor
+            );
+        } else if (!partitioned) {
             Key baseModel = key(flat
                     ? "minecraft:block/cube_bottom_top"
                     : "sophisticatedstorage:block/barrel_part/base");
@@ -228,12 +241,12 @@ final class SophisticatedRenderer implements BlockRenderer {
             emitted = json.emit(
                     key("sophisticatedstorage:block/barrel_part/" + prefix + "core"),
                     block, target, xRotation, yRotation, 0F, overrides,
-                    ignored -> WHITE, mapColor
+                    materialOverrides, ignored -> WHITE, mapColor
             );
             emitted = json.emit(
                     key("sophisticatedstorage:block/barrel_part/" + prefix + "trim"),
                     block, target, xRotation, yRotation, 0F, overrides,
-                    ignored -> WHITE, mapColor
+                    materialOverrides, ignored -> WHITE, mapColor
             ) && emitted;
         }
         if (!flat && limited > 1) {
@@ -245,6 +258,7 @@ final class SophisticatedRenderer implements BlockRenderer {
                     xRotation,
                     yRotation,
                     overrides,
+                    materialOverrides,
                     WHITE,
                     mapColor
             ) && emitted;
@@ -266,18 +280,60 @@ final class SophisticatedRenderer implements BlockRenderer {
                 accentOverrides.put("top_inner_trim", accentOverrides.get("top"));
             }
             if (snapshot.mainColor().isPresent()) {
-                emitted = json.emit(
-                        key("sophisticatedstorage:block/barrel_part/" + mainModel),
-                        block, target, xRotation, yRotation, 0F, mainOverrides,
-                        tint -> tint == 1000 ? main : WHITE, mapColor
-                ) && emitted;
+                boolean mainEmitted = partitioned && flat && limited > 1
+                        ? emitFlatLimitedMainParts(
+                                limited,
+                                block,
+                                target,
+                                xRotation,
+                                yRotation,
+                                mainOverrides,
+                                materialOverrides,
+                                main,
+                                mapColor
+                        )
+                        : json.emit(
+                                key("sophisticatedstorage:block/barrel_part/"
+                                        + partitionedModel(
+                                                partitioned, flat, "tintable_core", mainModel
+                                        )),
+                                block, target, xRotation, yRotation, 0F, mainOverrides,
+                                materialOverrides,
+                                tint -> tint == 1000 ? main : WHITE, mapColor
+                        );
+                if (partitioned && limited == 0) {
+                    mainEmitted = json.emit(
+                            key("sophisticatedstorage:block/barrel_part/"
+                                    + (flat ? "flat_handle_core" : "handle_core")),
+                            block, target, xRotation, yRotation, 0F, Map.of(),
+                            ignored -> WHITE, mapColor
+                    ) && mainEmitted;
+                }
+                emitted = mainEmitted && emitted;
             }
             if (snapshot.accentColor().isPresent()) {
-                emitted = json.emit(
-                        key("sophisticatedstorage:block/barrel_part/" + accentModel),
-                        block, target, xRotation, yRotation, 0F, accentOverrides,
-                        tint -> tint == 1001 ? accent : WHITE, mapColor
-                ) && emitted;
+                boolean accentEmitted = partitioned && flat && limited > 1
+                        ? emitFlatLimitedAccentParts(
+                                limited,
+                                block,
+                                target,
+                                xRotation,
+                                yRotation,
+                                accentOverrides,
+                                materialOverrides,
+                                accent,
+                                mapColor
+                        )
+                        : json.emit(
+                                key("sophisticatedstorage:block/barrel_part/"
+                                        + partitionedModel(
+                                                partitioned, flat, "tintable_trim", accentModel
+                                        )),
+                                block, target, xRotation, yRotation, 0F, accentOverrides,
+                                materialOverrides,
+                                tint -> tint == 1001 ? accent : WHITE, mapColor
+                        );
+                emitted = accentEmitted && emitted;
             }
             if (!flat && limited > 1 && snapshot.accentColor().isPresent()) {
                 emitted = emitLimitedDividerParts(
@@ -288,6 +344,7 @@ final class SophisticatedRenderer implements BlockRenderer {
                         xRotation,
                         yRotation,
                         accentOverrides,
+                        materialOverrides,
                         accent,
                         mapColor
                 ) && emitted;
@@ -300,19 +357,68 @@ final class SophisticatedRenderer implements BlockRenderer {
                     "sophisticatedstorage:block/" + tier + "_barrel_side",
                     "sophisticatedstorage:block/" + tier + "_barrel_bottom"
             );
-            emitted = json.emit(
-                    key(flat ? "minecraft:block/cube_bottom_top"
-                            : "sophisticatedstorage:block/barrel_part/base"),
-                    block, target, xRotation, yRotation, 0F, tierOverrides,
-                    ignored -> WHITE, mapColor
-            ) && emitted;
+            boolean tierEmitted = partitioned && flat && limited > 1
+                    ? emitFlatLimitedStaticParts(
+                            limited,
+                            block,
+                            target,
+                            xRotation,
+                            yRotation,
+                            tierOverrides,
+                            Map.of(),
+                            mapColor
+                    )
+                    : partitioned
+                            ? emitPartitionedStaticParts(
+                                    flat, block, target, xRotation, yRotation,
+                                    tierOverrides, mapColor
+                            )
+                            : json.emit(
+                                    key(flat ? "minecraft:block/cube_bottom_top"
+                                            : "sophisticatedstorage:block/barrel_part/base"),
+                                    block, target, xRotation, yRotation, 0F, tierOverrides,
+                                    ignored -> WHITE, mapColor
+                            );
+            emitted = tierEmitted && emitted;
         }
         if (snapshot.packed()) {
-            emitted = json.emit(
-                    key("sophisticatedstorage:block/barrel_part/packed"), block, target,
-                    xRotation, yRotation, 0F,
-                    Map.of(), ignored -> WHITE, mapColor
-            ) && emitted;
+            Map<String, Key> packedOverrides = barrelTextures(
+                    "sophisticatedstorage:block/barrel_top_packed",
+                    "sophisticatedstorage:block/barrel_side_packed",
+                    "sophisticatedstorage:block/barrel_bottom_packed"
+            );
+            boolean packedEmitted;
+            if (partitioned && flat && limited > 1) {
+                packedEmitted = emitFlatLimitedStaticParts(
+                        limited,
+                        block,
+                        target,
+                        xRotation,
+                        yRotation,
+                        packedOverrides,
+                        Map.of(),
+                        mapColor
+                );
+            } else if (partitioned) {
+                packedEmitted = emitPartitionedStaticParts(
+                        flat, block, target, xRotation, yRotation,
+                        packedOverrides, mapColor
+                );
+            } else {
+                packedEmitted = json.emit(
+                        key(flat ? "minecraft:block/cube_bottom_top"
+                                : "sophisticatedstorage:block/barrel_part/packed"),
+                        block,
+                        target,
+                        xRotation,
+                        yRotation,
+                        0F,
+                        flat ? packedOverrides : Map.of(),
+                        ignored -> WHITE,
+                        mapColor
+                );
+            }
+            emitted = packedEmitted && emitted;
             if (!flat && limited > 1) {
                 emitted = emitLimitedDividerParts(
                         limited,
@@ -321,10 +427,8 @@ final class SophisticatedRenderer implements BlockRenderer {
                         target,
                         xRotation,
                         yRotation,
-                        Map.of(
-                                "top_inner_trim",
-                                key("sophisticatedstorage:block/barrel_top_packed")
-                        ),
+                        packedOverrides,
+                        Map.of(),
                         WHITE,
                         mapColor
                 ) && emitted;
@@ -339,26 +443,163 @@ final class SophisticatedRenderer implements BlockRenderer {
         return emitted;
     }
 
+    private boolean emitPartitionedStaticParts(
+            boolean flat,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            Map<String, Key> overrides,
+            Color mapColor
+    ) {
+        boolean emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/"
+                        + (flat ? "flat_core" : "core")),
+                block, target, xRotation, yRotation, 0F, overrides,
+                ignored -> WHITE, mapColor
+        );
+        return json.emit(
+                key("sophisticatedstorage:block/barrel_part/"
+                        + (flat ? "flat_trim" : "trim")),
+                block, target, xRotation, yRotation, 0F, overrides,
+                ignored -> WHITE, mapColor
+        ) && emitted;
+    }
+
+    private boolean emitFlatLimitedStaticParts(
+            int slots,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
+            Color mapColor
+    ) {
+        boolean emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_core_without_top"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, ignored -> WHITE, mapColor
+        );
+        emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_limited_"
+                        + slots + "_core_top"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, ignored -> WHITE, mapColor
+        ) && emitted;
+        emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_trim"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, ignored -> WHITE, mapColor
+        ) && emitted;
+        return emitFlatLimitedDividerParts(
+                slots, "", block, target, xRotation, yRotation,
+                overrides, materialOverrides, WHITE, mapColor
+        ) && emitted;
+    }
+
+    private boolean emitFlatLimitedMainParts(
+            int slots,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
+            int main,
+            Color mapColor
+    ) {
+        boolean emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_tintable_core_without_top"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, tint -> tint == 1000 ? main : WHITE, mapColor
+        );
+        return json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_tintable_limited_"
+                        + slots + "_core_top"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, tint -> tint == 1000 ? main : WHITE, mapColor
+        ) && emitted;
+    }
+
+    private boolean emitFlatLimitedAccentParts(
+            int slots,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
+            int accent,
+            Color mapColor
+    ) {
+        boolean emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_tintable_trim"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, tint -> tint == 1001 ? accent : WHITE, mapColor
+        );
+        return emitFlatLimitedDividerParts(
+                slots, "tintable_", block, target, xRotation, yRotation,
+                overrides, materialOverrides, accent, mapColor
+        ) && emitted;
+    }
+
+    private boolean emitFlatLimitedDividerParts(
+            int slots,
+            String tintPrefix,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
+            int tintColor,
+            Color mapColor
+    ) {
+        boolean emitted = json.emit(
+                key("sophisticatedstorage:block/barrel_part/flat_" + tintPrefix
+                        + "middle_inner_trim"),
+                block, target, xRotation, yRotation, 0F, overrides,
+                materialOverrides, tint -> tint == 1001 ? tintColor : WHITE, mapColor
+        );
+        if (slots >= 3) {
+            emitted = json.emit(
+                    key("sophisticatedstorage:block/barrel_part/flat_" + tintPrefix
+                            + "down_inner_trim"),
+                    block, target, xRotation, yRotation, 0F, overrides,
+                    materialOverrides, tint -> tint == 1001 ? tintColor : WHITE, mapColor
+            ) && emitted;
+        }
+        if (slots >= 4) {
+            emitted = json.emit(
+                    key("sophisticatedstorage:block/barrel_part/flat_" + tintPrefix
+                            + "up_inner_trim"),
+                    block, target, xRotation, yRotation, 0F, overrides,
+                    materialOverrides, tint -> tint == 1001 ? tintColor : WHITE, mapColor
+            ) && emitted;
+        }
+        return emitted;
+    }
+
     private boolean applyBarrelCamos(
             SophisticatedSnapshot snapshot,
-            Map<String, Key> overrides
+            BlockNeighborhood block,
+            Map<String, ResolvedBlockMaterial> materialOverrides
     ) {
         for (Map.Entry<String, String> entry : snapshot.barrelMaterials().entrySet()) {
             String slot = entry.getKey();
-            Optional<Key> resolved;
-            if (slot.startsWith("side")) {
-                resolved = resolveMaterial(entry.getValue(), Direction.NORTH);
-            } else if (slot.startsWith("top")) {
-                resolved = resolveMaterial(entry.getValue(), Direction.UP);
-            } else if (slot.startsWith("bottom")) {
-                resolved = resolveMaterial(entry.getValue(), Direction.DOWN);
-            } else {
+            if (!slot.startsWith("side")
+                    && !slot.startsWith("top")
+                    && !slot.startsWith("bottom")) {
                 return false;
             }
+            Optional<ResolvedBlockMaterial> resolved = blockMaterials.resolve(
+                    entry.getValue(), block
+            );
             if (resolved.isEmpty()) {
                 return false;
             }
-            overrides.put(slot, resolved.orElseThrow());
+            materialOverrides.put(slot, resolved.orElseThrow());
         }
         return true;
     }
@@ -371,6 +612,7 @@ final class SophisticatedRenderer implements BlockRenderer {
             float xRotation,
             float yRotation,
             Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
             int accent,
             Color mapColor
     ) {
@@ -382,7 +624,7 @@ final class SophisticatedRenderer implements BlockRenderer {
                 yRotation,
                 0F,
                 overrides,
-                tint -> tint == 1001 ? accent : WHITE,
+                materialOverrides, tint -> tint == 1001 ? accent : WHITE,
                 mapColor
         );
         if (slots >= 3) {
@@ -394,7 +636,7 @@ final class SophisticatedRenderer implements BlockRenderer {
                     yRotation,
                     0F,
                     overrides,
-                    tint -> tint == 1001 ? accent : WHITE,
+                    materialOverrides, tint -> tint == 1001 ? accent : WHITE,
                     mapColor
             ) && emitted;
         }
@@ -407,15 +649,11 @@ final class SophisticatedRenderer implements BlockRenderer {
                     yRotation,
                     0F,
                     overrides,
-                    tint -> tint == 1001 ? accent : WHITE,
+                    materialOverrides, tint -> tint == 1001 ? accent : WHITE,
                     mapColor
             ) && emitted;
         }
         return emitted;
-    }
-
-    private Optional<Key> resolveMaterial(String id, Direction face) {
-        return blockMaterials.resolve(id, face);
     }
 
     private boolean renderSimpleMaterial(
@@ -436,17 +674,20 @@ final class SophisticatedRenderer implements BlockRenderer {
         }
 
         Map<Direction, Key> base = new EnumMap<>(Direction.class);
+        Map<Direction, Integer> baseColors = new EnumMap<>(Direction.class);
         String material = data.material();
         if (material != null && !material.isBlank()) {
             if (!material.matches("[a-z0-9_.-]+:[a-z0-9_./-]+")) {
                 return false;
             }
+            Optional<ResolvedBlockMaterial> resolved = blockMaterials.resolve(material, block);
+            if (resolved.isEmpty()) {
+                return false;
+            }
             for (Direction direction : Direction.values()) {
-                Optional<Key> resolved = resolveMaterial(material, direction);
-                if (resolved.isEmpty()) {
-                    return false;
-                }
-                base.put(direction, resolved.orElseThrow());
+                ResolvedBlockMaterial.Face face = resolved.orElseThrow().face(direction);
+                base.put(direction, face.texture());
+                baseColors.put(direction, face.argb());
             }
         } else if (link) {
             base.put(Direction.UP, key("sophisticatedstorage:block/storage_link_top"));
@@ -460,6 +701,9 @@ final class SophisticatedRenderer implements BlockRenderer {
             base.put(Direction.DOWN, top);
             fillSides(base, key("sophisticatedstorage:block/" + blockPath + "_side"));
         }
+        for (Direction direction : Direction.values()) {
+            baseColors.putIfAbsent(direction, WHITE);
+        }
 
         float min = link ? 1F / 16F : 0F;
         float max = link ? 15F / 16F : 1F;
@@ -468,7 +712,8 @@ final class SophisticatedRenderer implements BlockRenderer {
         float yRotation = link ? stateRotation(block, "facing", 1) : 0F;
         boolean emitted = primitives.cuboid(
                 block, target, min, 0F, min, max, maxY, max,
-                Map.copyOf(base), WHITE, xRotation, yRotation, 0F, mapColor
+                Map.copyOf(base), direction -> baseColors.get(direction),
+                xRotation, yRotation, 0F, mapColor
         );
         if (data.overlayHidden()) {
             return emitted;
@@ -836,6 +1081,18 @@ final class SophisticatedRenderer implements BlockRenderer {
 
     private static int color(OptionalInt value, int fallback) {
         return value.isPresent() ? value.getAsInt() : fallback;
+    }
+
+    private static String partitionedModel(
+            boolean partitioned,
+            boolean flat,
+            String partitionedName,
+            String ordinaryName
+    ) {
+        if (!partitioned) {
+            return ordinaryName;
+        }
+        return flat ? "flat_" + partitionedName : partitionedName;
     }
 
     private static boolean barrel(String id) {

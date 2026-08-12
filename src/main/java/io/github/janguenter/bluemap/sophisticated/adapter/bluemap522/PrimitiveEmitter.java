@@ -18,6 +18,7 @@ import de.bluecolored.bluemap.core.world.LightData;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
 
 import java.util.Map;
+import java.util.function.Function;
 
 /** Small cuboid emitter for closed chest, shulker and barrel exterior layers. */
 final class PrimitiveEmitter {
@@ -49,19 +50,47 @@ final class PrimitiveEmitter {
             float zRotation,
             Color mapColor
     ) {
+        return cuboid(
+                block, target, minX, minY, minZ, maxX, maxY, maxZ,
+                materials, ignored -> argb, xRotation, yRotation, zRotation, mapColor
+        );
+    }
+
+    boolean cuboid(
+            BlockNeighborhood block,
+            TileModelView target,
+            float minX,
+            float minY,
+            float minZ,
+            float maxX,
+            float maxY,
+            float maxZ,
+            Map<Direction, Key> materials,
+            Function<Direction, Integer> colorProvider,
+            float xRotation,
+            float yRotation,
+            float zRotation,
+            Color mapColor
+    ) {
         int start = target.getTileModel().size();
         boolean emitted = false;
-        emitted |= quad(block, target, Direction.DOWN, materials.get(Direction.DOWN), argb,
+        emitted |= quad(block, target, Direction.DOWN, materials.get(Direction.DOWN),
+                colorProvider.apply(Direction.DOWN),
                 minX, minY, minZ, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ, mapColor);
-        emitted |= quad(block, target, Direction.UP, materials.get(Direction.UP), argb,
+        emitted |= quad(block, target, Direction.UP, materials.get(Direction.UP),
+                colorProvider.apply(Direction.UP),
                 minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ, minX, maxY, minZ, mapColor);
-        emitted |= quad(block, target, Direction.NORTH, materials.get(Direction.NORTH), argb,
+        emitted |= quad(block, target, Direction.NORTH, materials.get(Direction.NORTH),
+                colorProvider.apply(Direction.NORTH),
                 maxX, minY, minZ, minX, minY, minZ, minX, maxY, minZ, maxX, maxY, minZ, mapColor);
-        emitted |= quad(block, target, Direction.SOUTH, materials.get(Direction.SOUTH), argb,
+        emitted |= quad(block, target, Direction.SOUTH, materials.get(Direction.SOUTH),
+                colorProvider.apply(Direction.SOUTH),
                 minX, minY, maxZ, maxX, minY, maxZ, maxX, maxY, maxZ, minX, maxY, maxZ, mapColor);
-        emitted |= quad(block, target, Direction.WEST, materials.get(Direction.WEST), argb,
+        emitted |= quad(block, target, Direction.WEST, materials.get(Direction.WEST),
+                colorProvider.apply(Direction.WEST),
                 minX, minY, minZ, minX, minY, maxZ, minX, maxY, maxZ, minX, maxY, minZ, mapColor);
-        emitted |= quad(block, target, Direction.EAST, materials.get(Direction.EAST), argb,
+        emitted |= quad(block, target, Direction.EAST, materials.get(Direction.EAST),
+                colorProvider.apply(Direction.EAST),
                 maxX, minY, maxZ, maxX, minY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ, mapColor);
 
         int count = target.getTileModel().size() - start;

@@ -52,8 +52,26 @@ final class JsonModelEmitter {
             IntFunction<Integer> tintProvider,
             Color mapColor
     ) {
+        return emit(
+                modelKey, block, target, xRotation, yRotation, zRotation,
+                textureOverrides, Map.of(), tintProvider, mapColor
+        );
+    }
+
+    boolean emit(
+            Key modelKey,
+            BlockNeighborhood block,
+            TileModelView target,
+            float xRotation,
+            float yRotation,
+            float zRotation,
+            Map<String, Key> textureOverrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
+            IntFunction<Integer> tintProvider,
+            Color mapColor
+    ) {
         Model model = resourcePack.getModels().get(modelKey);
-        if (!preflight(model, textureOverrides)) {
+        if (!preflight(model, textureOverrides, materialOverrides)) {
             return false;
         }
 
@@ -70,6 +88,7 @@ final class JsonModelEmitter {
                     block,
                     target,
                     textureOverrides,
+                    materialOverrides,
                     tintProvider,
                     mapColor
             );
@@ -93,7 +112,11 @@ final class JsonModelEmitter {
         return emitted;
     }
 
-    private boolean preflight(Model model, Map<String, Key> overrides) {
+    private boolean preflight(
+            Model model,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides
+    ) {
         if (model == null || model.getElements() == null || model.getElements().length == 0) {
             return false;
         }
@@ -102,9 +125,11 @@ final class JsonModelEmitter {
             if (element == null) {
                 continue;
             }
-            for (Face face : element.getFaces().values()) {
+            for (Map.Entry<Direction, Face> entry : element.getFaces().entrySet()) {
                 hasFace = true;
-                Key texture = textureKey(model, face, overrides);
+                Key texture = textureKey(
+                        model, entry.getValue(), entry.getKey(), overrides, materialOverrides
+                );
                 if (texture == null || resourcePack.getTextures().get(texture) == null) {
                     return false;
                 }
@@ -119,6 +144,7 @@ final class JsonModelEmitter {
             BlockNeighborhood block,
             TileModelView target,
             Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
             IntFunction<Integer> tintProvider,
             Color mapColor
     ) {
@@ -132,17 +158,23 @@ final class JsonModelEmitter {
         float z1 = to.getZ();
         boolean emitted = false;
         emitted |= emitFace(model, element, Direction.DOWN, block, target, overrides,
-                tintProvider, mapColor, x0, y0, z0, x1, y0, z0, x1, y0, z1, x0, y0, z1);
+                materialOverrides, tintProvider, mapColor,
+                x0, y0, z0, x1, y0, z0, x1, y0, z1, x0, y0, z1);
         emitted |= emitFace(model, element, Direction.UP, block, target, overrides,
-                tintProvider, mapColor, x0, y1, z1, x1, y1, z1, x1, y1, z0, x0, y1, z0);
+                materialOverrides, tintProvider, mapColor,
+                x0, y1, z1, x1, y1, z1, x1, y1, z0, x0, y1, z0);
         emitted |= emitFace(model, element, Direction.NORTH, block, target, overrides,
-                tintProvider, mapColor, x1, y0, z0, x0, y0, z0, x0, y1, z0, x1, y1, z0);
+                materialOverrides, tintProvider, mapColor,
+                x1, y0, z0, x0, y0, z0, x0, y1, z0, x1, y1, z0);
         emitted |= emitFace(model, element, Direction.SOUTH, block, target, overrides,
-                tintProvider, mapColor, x0, y0, z1, x1, y0, z1, x1, y1, z1, x0, y1, z1);
+                materialOverrides, tintProvider, mapColor,
+                x0, y0, z1, x1, y0, z1, x1, y1, z1, x0, y1, z1);
         emitted |= emitFace(model, element, Direction.WEST, block, target, overrides,
-                tintProvider, mapColor, x0, y0, z0, x0, y0, z1, x0, y1, z1, x0, y1, z0);
+                materialOverrides, tintProvider, mapColor,
+                x0, y0, z0, x0, y0, z1, x0, y1, z1, x0, y1, z0);
         emitted |= emitFace(model, element, Direction.EAST, block, target, overrides,
-                tintProvider, mapColor, x1, y0, z1, x1, y0, z0, x1, y1, z0, x1, y1, z1);
+                materialOverrides, tintProvider, mapColor,
+                x1, y0, z1, x1, y0, z0, x1, y1, z0, x1, y1, z1);
         return emitted;
     }
 
@@ -153,6 +185,7 @@ final class JsonModelEmitter {
             BlockNeighborhood block,
             TileModelView target,
             Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides,
             IntFunction<Integer> tintProvider,
             Color mapColor,
             float ax, float ay, float az,
@@ -165,7 +198,13 @@ final class JsonModelEmitter {
             return false;
         }
 
-        Key textureKey = textureKey(model, face, overrides);
+        String reference = face.getTexture().getReferenceName();
+        ResolvedBlockMaterial.Face materialFace = materialFace(
+                reference, direction, materialOverrides
+        );
+        Key textureKey = materialFace == null
+                ? textureKey(model, face, direction, overrides, materialOverrides)
+                : materialFace.texture();
         if (textureKey == null || resourcePack.getTextures().get(textureKey) == null) {
             return false;
         }
@@ -193,7 +232,9 @@ final class JsonModelEmitter {
         mesh.setMaterialIndex(start, material);
         mesh.setMaterialIndex(start + 1, material);
 
-        int argb = tintProvider.apply(face.getTintindex());
+        int argb = materialFace == null
+                ? tintProvider.apply(face.getTintindex())
+                : materialFace.argb();
         float red = ((argb >>> 16) & 0xFF) / 255F;
         float green = ((argb >>> 8) & 0xFF) / 255F;
         float blue = (argb & 0xFF) / 255F;
@@ -221,12 +262,36 @@ final class JsonModelEmitter {
         return true;
     }
 
-    private static Key textureKey(Model model, Face face, Map<String, Key> overrides) {
+    private static Key textureKey(
+            Model model,
+            Face face,
+            Direction direction,
+            Map<String, Key> overrides,
+            Map<String, ResolvedBlockMaterial> materialOverrides
+    ) {
         String reference = face.getTexture().getReferenceName();
+        ResolvedBlockMaterial.Face material = materialFace(
+                reference, direction, materialOverrides
+        );
+        if (material != null) {
+            return material.texture();
+        }
         if (reference != null && overrides.containsKey(reference)) {
             return overrides.get(reference);
         }
         ResourcePath<Texture> path = face.getTexture().getTexturePath(model.getTextures()::get);
         return path;
+    }
+
+    private static ResolvedBlockMaterial.Face materialFace(
+            String reference,
+            Direction direction,
+            Map<String, ResolvedBlockMaterial> materialOverrides
+    ) {
+        if (reference == null) {
+            return null;
+        }
+        ResolvedBlockMaterial material = materialOverrides.get(reference);
+        return material == null ? null : material.face(direction);
     }
 }
