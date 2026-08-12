@@ -1,0 +1,11 @@
+.gradle/
+.ci/
+build/
+out/
+*.class
+*.log
+*.zip
+*.py[cod]
+__pycache__/
+.idea/
+.vscode/

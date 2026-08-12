@@ -1,0 +1,111 @@
+{
+  "profileId": "sophisticatedbackpacks",
+  "modId": "sophisticatedbackpacks",
+  "version": "3.25.73",
+  "implementationVersion": "1.21.1-3.25.73.2027",
+  "artifact": "sophisticatedbackpacks-1.21.1-3.25.73.2027.jar",
+  "sizeBytes": 1144235,
+  "sha1": "e8baceab12d01ff170e7dcf3ab2079206d1407fd",
+  "sha256": "ded30f9269a92cc295ab0a735a86770ca097c30198b8f3f2288ecaac6542b93e",
+  "sha512": "fe92bd732f19d71818ba339cc3799645181c9dadbe669f99284125b6c96f70ed1f96bc4b91dfcf9220cc01a19c1dbfdcf95650bbd8e8166133c40d2660b90805",
+  "minecraft": "1.21.1",
+  "neoforge": "21.1.248",
+  "distribution": {
+    "provider": "CurseForge",
+    "projectId": 422301,
+    "fileId": 8569661
+  },
+  "metadata": {
+    "license": "All Rights Reserved",
+    "implementationTimestamp": "2026-08-03T14:11:44+0000",
+    "minecraftRange": "[1.21.1,1.21.2)",
+    "neoforgeRange": "[21.1.0,)",
+    "requiredDependencies": {
+      "sophisticatedcore": "[1.4.80,)"
+    }
+  },
+  "source": {
+    "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedBackpacks",
+    "correlationStatus": "unresolved-no-version-tag-or-build-attestation"
+  },
+  "schemaVersion": 1,
+  "coverage": {
+    "blockCount": 6,
+    "supportedBlocks": [
+      "sophisticatedbackpacks:backpack",
+      "sophisticatedbackpacks:copper_backpack",
+      "sophisticatedbackpacks:iron_backpack",
+      "sophisticatedbackpacks:gold_backpack",
+      "sophisticatedbackpacks:diamond_backpack",
+      "sophisticatedbackpacks:netherite_backpack"
+    ],
+    "renderPose": "closed-neutral-static"
+  },
+  "resourceClosure": {
+    "manifest": "required-resources.tsv",
+    "format": "path-tab-bytes-tab-sha256-lf",
+    "pathCount": 31,
+    "totalBytes": 72558,
+    "manifestSha256": "262348d4df50d183b0fa10f0472d3dfbfc4cd2cba187c92a2670ae8172462cee",
+    "selection": "all backpack blockstates plus static base, tier clip and attachment shell models/textures",
+    "excludedPaths": [
+      "assets/sophisticatedbackpacks/models/block/backpack_battery_charge.json",
+      "assets/sophisticatedbackpacks/models/block/backpack_display_item.json",
+      "assets/sophisticatedbackpacks/models/block/backpack_left_tank_fluid.json",
+      "assets/sophisticatedbackpacks/models/block/backpack_right_tank_fluid.json",
+      "assets/sophisticatedbackpacks/textures/block/backpack_display_item_anchor.png"
+    ]
+  },
+  "persistentVisualContract": {
+    "blockEntity": {
+      "itemStackCompound": "backpackData"
+    },
+    "itemStackComponents": {
+      "mainColor": "sophisticatedcore:main_color",
+      "accentColor": "sophisticatedcore:accent_color",
+      "renderInfo": "sophisticatedcore:render_info_tag",
+      "defaultMainColor": {
+        "signedInt": -3382982,
+        "argb": "FFCC613A"
+      },
+      "defaultAccentColor": {
+        "signedInt": -10342886,
+        "argb": "FF622E1A"
+      }
+    },
+    "stableBlockState": [
+      "facing",
+      "left_tank",
+      "right_tank",
+      "battery"
+    ],
+    "attachmentSubstitution": {
+      "left_tank=false": "left pouch",
+      "left_tank=true": "empty left tank shell",
+      "right_tank=false": "right pouch",
+      "right_tank=true": "empty right tank shell",
+      "battery=false": "front pouch",
+      "battery=true": "unlit empty battery shell"
+    },
+    "tintIndices": {
+      "mainCloth": 0,
+      "accentBorder": 1
+    },
+    "includedOptics": [
+      "tier-specific clip texture",
+      "main/accent dyes",
+      "facing",
+      "base and straps",
+      "stable pouch/tank/battery attachment shells"
+    ],
+    "excludedMutableState": [
+      "open animation",
+      "tank fluid type and fill level",
+      "battery charge and emissive charge surface",
+      "display item",
+      "inventory contents and counts",
+      "upgrade activity/render details"
+    ],
+    "defaultAndFallbackPolicy": "A valid supported backpack ItemStack with absent color components uses the exact default ARGB colors. A malformed ItemStack, unsupported backpack item/tier, tier/block mismatch, invalid component type, or missing required model/texture uses atomic whole-block stock fallback."
+  }
+}

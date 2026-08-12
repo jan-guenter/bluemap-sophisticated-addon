@@ -1,0 +1,221 @@
+// SPDX-License-Identifier: MIT
+
+plugins {
+    id 'java-library'
+    id 'checkstyle'
+    id 'maven-publish'
+}
+
+group = addon_group
+version = addon_version
+
+base {
+    archivesName = artifact_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri('https://repo.bluecolored.de/releases')
+        content { includeGroupByRegex('de\\.bluecolored.*') }
+    }
+}
+
+dependencies {
+    compileOnly "de.bluecolored:bluemap-core:${bluemap_version}"
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+
+    testImplementation "de.bluecolored:bluemap-core:${bluemap_version}"
+    testImplementation 'org.jetbrains:annotations:23.0.0'
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+    options.compilerArgs.addAll(['-Xlint:all', '-Werror'])
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = '10.18.2'
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes(
+                'Automatic-Module-Name': 'io.github.janguenter.bluemap.sophisticated',
+                'Implementation-Title': addon_name,
+                'Implementation-Version': project.version.toString()
+        )
+    }
+    from('LICENSE') {
+        into 'META-INF'
+        rename { 'LICENSE-bluemap-sophisticated-addon' }
+    }
+    from('NOTICE.md') {
+        into 'META-INF'
+        rename { 'NOTICE-bluemap-sophisticated-addon.md' }
+    }
+    from('THIRD_PARTY.md') {
+        into 'META-INF'
+        rename { 'THIRD_PARTY-bluemap-sophisticated-addon.md' }
+    }
+    from('provenance/upstreams.json') {
+        into 'META-INF/bluemap-sophisticated'
+    }
+}
+
+tasks.named('sourcesJar', Jar).configure {
+    from('LICENSE') {
+        into 'META-INF'
+        rename { 'LICENSE-bluemap-sophisticated-addon' }
+    }
+    from('NOTICE.md') {
+        into 'META-INF'
+        rename { 'NOTICE-bluemap-sophisticated-addon.md' }
+    }
+    from('THIRD_PARTY.md') {
+        into 'META-INF'
+        rename { 'THIRD_PARTY-bluemap-sophisticated-addon.md' }
+    }
+    from('provenance/upstreams.json') {
+        into 'META-INF/bluemap-sophisticated'
+    }
+}
+
+def productionJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+tasks.register('verifyProductionJar') {
+    dependsOn tasks.named('jar')
+    inputs.file(productionJar)
+
+    doLast {
+        def jarFile = inputs.files.singleFile
+        def zip = new java.util.zip.ZipFile(jarFile)
+        try {
+            def entries = zip.entries().findAll { !it.directory }.collect { it.name }
+            def required = [
+                    'bluemap.addon.json',
+                    'assets/bluemap_sophisticated/blockstates/sophisticated_shape.json',
+                    'bluemap-sophisticated/profiles/exact-artifacts.json',
+                    'bluemap-sophisticated/profiles/sophisticatedcore/1.4.80/profile.json',
+                    'bluemap-sophisticated/profiles/sophisticatedstorage/1.5.83/profile.json',
+                    'bluemap-sophisticated/profiles/sophisticatedstorage/1.5.83/required-resources.tsv',
+                    'bluemap-sophisticated/profiles/sophisticatedbackpacks/3.25.73/profile.json',
+                    'bluemap-sophisticated/profiles/sophisticatedbackpacks/3.25.73/required-resources.tsv',
+                    'META-INF/LICENSE-bluemap-sophisticated-addon',
+                    'META-INF/NOTICE-bluemap-sophisticated-addon.md',
+                    'META-INF/THIRD_PARTY-bluemap-sophisticated-addon.md',
+                    'META-INF/bluemap-sophisticated/upstreams.json'
+            ]
+            def missing = required.findAll { !entries.contains(it) }
+            if (!missing.isEmpty()) {
+                throw new GradleException("Production JAR is missing: ${missing}")
+            }
+            def addon = new groovy.json.JsonSlurper().parseText(
+                    zip.getInputStream(zip.getEntry('bluemap.addon.json')).getText('UTF-8')
+            )
+            if (addon.id != addon_id
+                    || addon.entrypoint != 'io.github.janguenter.bluemap.sophisticated.BlueMapSophisticatedAddon'
+                    || addon.dependencies != []
+                    || addon['soft-dependencies'] != []) {
+                throw new GradleException('BlueMap add-on metadata mismatch')
+            }
+            def forbidden = entries.findAll {
+                it.endsWith('.jar')
+                        || it == 'META-INF/neoforge.mods.toml'
+                        || it == 'fabric.mod.json'
+                        || it.endsWith('.mixins.json')
+                        || it.startsWith('de/bluecolored/')
+                        || it.startsWith('net/p3pp3rf1y/')
+                        || it.startsWith('net/minecraft/')
+                        || it.startsWith('net/neoforged/')
+            }
+            if (!forbidden.isEmpty()) {
+                throw new GradleException("Production JAR contains forbidden entries: ${forbidden}")
+            }
+        } finally {
+            zip.close()
+        }
+    }
+}
+
+tasks.named('check').configure {
+    dependsOn tasks.named('verifyProductionJar')
+}
+
+tasks.register('verifyPinnedArtifacts', Exec) {
+    def coreJar = providers.gradleProperty('sophisticatedCoreJar')
+    def storageJar = providers.gradleProperty('sophisticatedStorageJar')
+    def backpacksJar = providers.gradleProperty('sophisticatedBackpacksJar')
+    doFirst {
+        if (!coreJar.isPresent() || !storageJar.isPresent() || !backpacksJar.isPresent()) {
+            throw new GradleException(
+                    'Set -PsophisticatedCoreJar, -PsophisticatedStorageJar, '
+                            + 'and -PsophisticatedBackpacksJar to the exact ATM 1.2.0 artifacts.'
+            )
+        }
+    }
+    commandLine 'python3', 'tools/verify_pinned_artifacts.py',
+            '--core', coreJar.getOrElse('missing'),
+            '--storage', storageJar.getOrElse('missing'),
+            '--backpacks', backpacksJar.getOrElse('missing')
+}
+
+publishing {
+    publications {
+        addon(MavenPublication) {
+            from components.java
+            artifactId = artifact_id
+            pom {
+                name = addon_name
+                description = 'Exact-profile BlueMap rendering for Sophisticated Storage and Backpacks.'
+                url = 'https://github.com/jan-guenter/bluemap-sophisticated-addon'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://spdx.org/licenses/MIT.html'
+                        distribution = 'repo'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/jan-guenter/bluemap-sophisticated-addon'
+                    connection = 'scm:git:https://github.com/jan-guenter/bluemap-sophisticated-addon.git'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri('https://maven.pkg.github.com/jan-guenter/bluemap-sophisticated-addon')
+            credentials {
+                username = System.getenv('GITHUB_ACTOR')
+                password = System.getenv('GITHUB_TOKEN')
+            }
+        }
+    }
+}

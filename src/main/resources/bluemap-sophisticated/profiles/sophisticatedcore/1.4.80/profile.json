@@ -1,0 +1,64 @@
+{
+  "profileId": "sophisticatedcore",
+  "modId": "sophisticatedcore",
+  "version": "1.4.80",
+  "implementationVersion": "1.21.1-1.4.80.2194",
+  "artifact": "sophisticatedcore-1.21.1-1.4.80.2194.jar",
+  "sizeBytes": 1673669,
+  "sha1": "bef1d5186feaed80b11bd1e6f2dc880e8bec0449",
+  "sha256": "58a35e74642de9a7ffd39604f06903df39c166d332551c5770ca2e21685defc0",
+  "sha512": "277d93609e53a70e693f3b492e37b537534e06be3f24313f3930c1bca4d6c556c2cc54e6a2f4d03622b9acbbc4ac29766df80941a93dae245890c5ecf52851ea",
+  "minecraft": "1.21.1",
+  "neoforge": "21.1.248",
+  "distribution": {
+    "provider": "CurseForge",
+    "projectId": 618298,
+    "fileId": 8503041
+  },
+  "metadata": {
+    "license": "All Rights Reserved",
+    "implementationTimestamp": "2026-07-24T23:16:40+0000",
+    "minecraftRange": "[1.21.1,1.21.2)",
+    "neoforgeRange": "[21.1.0,)"
+  },
+  "source": {
+    "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedCore",
+    "correlationStatus": "unresolved-no-version-tag-or-build-attestation"
+  },
+  "schemaVersion": 1,
+  "coverage": {
+    "blockCount": 0,
+    "role": "exact direct rendering dependency and persisted data-component contract"
+  },
+  "resourceClosure": {
+    "pathCount": 0,
+    "reason": "Sophisticated Core owns the persisted render data contract but no supported world-block exterior resource closure."
+  },
+  "persistentVisualContract": {
+    "dataComponents": {
+      "mainColor": {
+        "id": "sophisticatedcore:main_color",
+        "codec": "persistent int",
+        "networkSynchronized": true
+      },
+      "accentColor": {
+        "id": "sophisticatedcore:accent_color",
+        "codec": "persistent int",
+        "networkSynchronized": true
+      },
+      "renderInfo": {
+        "id": "sophisticatedcore:render_info_tag",
+        "codec": "persistent CustomData",
+        "networkSynchronized": true
+      }
+    },
+    "renderInfoNbtKeys": [
+      "tanks",
+      "battery",
+      "itemDisplay",
+      "upgrades",
+      "upgradeItems"
+    ],
+    "scopePolicy": "Do not consume RenderInfo live values for the static map. Tank/battery shell presence comes from supported blockstate booleans; fluids, fill, charge, displayed items, upgrade visuals and activity remain excluded."
+  }
+}

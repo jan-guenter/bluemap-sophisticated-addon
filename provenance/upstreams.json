@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "project_license": "MIT",
+  "implementation_lane": "clean-room-runtime-interface-and-resource-format",
+  "baseline": {
+    "pack": "All the Mons 1.2.0",
+    "pack_commit": "c7bb230f21d14d26859d0b92548f089b3a493ad9",
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.248",
+    "java": 21
+  },
+  "bluemap": {
+    "backport_version": "5.22-agent.backport-5.22-mc1.21.1-2",
+    "backport_commit": "9be321df995a1103808621d529eb72773e719d4d",
+    "api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
+    "release_jar_sha256": "749f7647fa29764cea113114a7ab3259271bab3da22720989f2bd9fd1f3ba150",
+    "declared_license": "MIT",
+    "bundled": false
+  },
+  "artifacts": {
+    "sophisticatedcore": {
+      "version": "1.4.80.2194",
+      "file_name": "sophisticatedcore-1.21.1-1.4.80.2194.jar",
+      "size": 1673669,
+      "sha1": "bef1d5186feaed80b11bd1e6f2dc880e8bec0449",
+      "sha256": "58a35e74642de9a7ffd39604f06903df39c166d332551c5770ca2e21685defc0",
+      "sha512": "277d93609e53a70e693f3b492e37b537534e06be3f24313f3930c1bca4d6c556c2cc54e6a2f4d03622b9acbbc4ac29766df80941a93dae245890c5ecf52851ea",
+      "curseforge_project_id": 618298,
+      "curseforge_file_id": 8503041,
+      "declared_license": "All Rights Reserved",
+      "bundled": false
+    },
+    "sophisticatedstorage": {
+      "version": "1.5.83.2017",
+      "file_name": "sophisticatedstorage-1.21.1-1.5.83.2017.jar",
+      "size": 1828640,
+      "sha1": "b36fa724fe925e715d8b13929d5789125e97e81b",
+      "sha256": "354f62ef885b3219fb0787d211582d7ea733800ff31787cc85b9af68d260b600",
+      "sha512": "af16494408c31e87a94e1d517c684b4b0c0fdb7ceaf6332ac1c281e18ee0cd9e0e87605f9a991b21ad737dff8eb83d5e0ac811983d881da5e56f989d344d46da",
+      "curseforge_project_id": 619320,
+      "curseforge_file_id": 8503122,
+      "resource_manifest_rows": 430,
+      "resource_manifest_sha256": "95be6bc7e6d27a555823bade8d65f7757c4576c58b0634bcc76866232dfbd627",
+      "declared_license": "All Rights Reserved",
+      "bundled": false
+    },
+    "sophisticatedbackpacks": {
+      "version": "3.25.73.2027",
+      "file_name": "sophisticatedbackpacks-1.21.1-3.25.73.2027.jar",
+      "size": 1144235,
+      "sha1": "e8baceab12d01ff170e7dcf3ab2079206d1407fd",
+      "sha256": "ded30f9269a92cc295ab0a735a86770ca097c30198b8f3f2288ecaac6542b93e",
+      "sha512": "fe92bd732f19d71818ba339cc3799645181c9dadbe669f99284125b6c96f70ed1f96bc4b91dfcf9220cc01a19c1dbfdcf95650bbd8e8166133c40d2660b90805",
+      "curseforge_project_id": 422301,
+      "curseforge_file_id": 8569661,
+      "resource_manifest_rows": 31,
+      "resource_manifest_sha256": "262348d4df50d183b0fa10f0472d3dfbfc4cd2cba187c92a2670ae8172462cee",
+      "declared_license": "All Rights Reserved",
+      "bundled": false
+    }
+  },
+  "routes": [
+    {
+      "id": "storage",
+      "blocks": 59,
+      "shared_gate": "sophisticatedcore",
+      "failure_boundary": "route-local-atomic-stock-fallback"
+    },
+    {
+      "id": "backpacks",
+      "blocks": 6,
+      "shared_gate": "sophisticatedcore",
+      "failure_boundary": "route-local-atomic-stock-fallback"
+    }
+  ],
+  "third_party_source_or_assets_bundled": false
+}
