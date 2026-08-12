@@ -766,8 +766,7 @@ final class SophisticatedRenderer implements BlockRenderer {
             case "right" -> "minecraft:entity/chest/chest_double_right";
             default -> "minecraft:entity/chest/chest";
         });
-        Key base = key("sophisticatedstorage:entity/chest/" + texturePrefix
-                + (tier.equals("wood") ? wood : "wood_tier"));
+        Key base = key("sophisticatedstorage:entity/chest/" + texturePrefix + wood);
         Key tierTexture = key("sophisticatedstorage:entity/chest/" + texturePrefix + tier + "_tier");
         Key mainTexture = key("sophisticatedstorage:entity/chest/" + texturePrefix + "tintable_main");
         Key accentTexture = key("sophisticatedstorage:entity/chest/" + texturePrefix + "tintable_accent");
@@ -781,13 +780,20 @@ final class SophisticatedRenderer implements BlockRenderer {
             emitted = chestLayer(model, block, target, accentTexture,
                     snapshot.accentColor().getAsInt(), yRotation, mapColor) && emitted;
         }
-        if (snapshot.showTier() && !tier.equals("wood")) {
+        if (snapshot.showTier()) {
             emitted = chestLayer(model, block, target, tierTexture, WHITE, yRotation, mapColor) && emitted;
         }
         if (snapshot.packed()) {
-            emitted = chestLayer(model, block, target,
+            int packedStart = target.getTileModel().size();
+            boolean packedEmitted = chestLayer(model, block, target,
                     key("sophisticatedstorage:entity/chest/" + texturePrefix + "packed"),
-                    WHITE, yRotation, mapColor) && emitted;
+                    WHITE, yRotation, mapColor);
+            if (packedEmitted) {
+                target.initialize(packedStart)
+                        .scale(1.01F, 1.01F, 1.01F)
+                        .translate(-0.005F, -0.005F, -0.005F);
+            }
+            emitted = packedEmitted && emitted;
         }
         if (!snapshot.packed() && snapshot.locked() && snapshot.showLock()
                 && !chestType.equals("left")) {
@@ -853,6 +859,8 @@ final class SophisticatedRenderer implements BlockRenderer {
             emitted = shulkerLayer(block, target, tierTexture, WHITE, x, y, mapColor) && emitted;
         }
         if (snapshot.locked() && snapshot.showLock()) {
+            float lockX = northBasedRotation(block, 0);
+            float lockY = northBasedRotation(block, 1);
             emitted = primitives.plate(
                     block,
                     target,
@@ -864,8 +872,8 @@ final class SophisticatedRenderer implements BlockRenderer {
                     -0.001F,
                     key("sophisticatedstorage:block/lock"),
                     WHITE,
-                    x,
-                    y,
+                    lockX,
+                    lockY,
                     0F,
                     mapColor
             ) && emitted;
@@ -1159,6 +1167,23 @@ final class SophisticatedRenderer implements BlockRenderer {
             case "east" -> 90F;
             case "south" -> 180F;
             case "west" -> 270F;
+            default -> 0F;
+        };
+    }
+
+    private static float northBasedRotation(BlockNeighborhood block, int axis) {
+        String facing = block.getBlockState().getProperties().getOrDefault("facing", "north");
+        if (axis == 0) {
+            return switch (facing) {
+                case "up" -> 90F;
+                case "down" -> 270F;
+                default -> 0F;
+            };
+        }
+        return switch (facing) {
+            case "east" -> 270F;
+            case "south" -> 180F;
+            case "west" -> 90F;
             default -> 0F;
         };
     }

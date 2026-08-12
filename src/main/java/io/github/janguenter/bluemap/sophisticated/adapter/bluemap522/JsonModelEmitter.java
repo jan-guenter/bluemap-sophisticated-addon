@@ -22,7 +22,6 @@ import de.bluecolored.bluemap.core.util.Direction;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.util.math.Color;
 import de.bluecolored.bluemap.core.util.math.MatrixM4f;
-import de.bluecolored.bluemap.core.world.LightData;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
 
 import java.util.Map;
@@ -74,6 +73,9 @@ final class JsonModelEmitter {
         if (!preflight(model, textureOverrides, materialOverrides)) {
             return false;
         }
+        Variant transform = new Variant(
+                new ResourcePath<>(modelKey), xRotation, yRotation, zRotation
+        );
 
         int modelStart = target.getTileModel().size();
         boolean emitted = false;
@@ -90,7 +92,8 @@ final class JsonModelEmitter {
                     textureOverrides,
                     materialOverrides,
                     tintProvider,
-                    mapColor
+                    mapColor,
+                    transform
             );
             int elementCount = target.getTileModel().size() - elementStart;
             if (elementCount > 0) {
@@ -103,9 +106,6 @@ final class JsonModelEmitter {
 
         int count = target.getTileModel().size() - modelStart;
         if (count > 0 && (xRotation != 0F || yRotation != 0F || zRotation != 0F)) {
-            Variant transform = new Variant(
-                    new ResourcePath<>(modelKey), xRotation, yRotation, zRotation
-            );
             target.initialize(modelStart).transform(transform.getTransformMatrix());
         }
         target.initialize(modelStart);
@@ -146,7 +146,8 @@ final class JsonModelEmitter {
             Map<String, Key> overrides,
             Map<String, ResolvedBlockMaterial> materialOverrides,
             IntFunction<Integer> tintProvider,
-            Color mapColor
+            Color mapColor,
+            Variant transform
     ) {
         Vector3f from = element.getFrom();
         Vector3f to = element.getTo();
@@ -158,22 +159,22 @@ final class JsonModelEmitter {
         float z1 = to.getZ();
         boolean emitted = false;
         emitted |= emitFace(model, element, Direction.DOWN, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x0, y0, z0, x1, y0, z0, x1, y0, z1, x0, y0, z1);
         emitted |= emitFace(model, element, Direction.UP, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x0, y1, z1, x1, y1, z1, x1, y1, z0, x0, y1, z0);
         emitted |= emitFace(model, element, Direction.NORTH, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x1, y0, z0, x0, y0, z0, x0, y1, z0, x1, y1, z0);
         emitted |= emitFace(model, element, Direction.SOUTH, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x0, y0, z1, x1, y0, z1, x1, y1, z1, x0, y1, z1);
         emitted |= emitFace(model, element, Direction.WEST, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x0, y0, z0, x0, y0, z1, x0, y1, z1, x0, y1, z0);
         emitted |= emitFace(model, element, Direction.EAST, block, target, overrides,
-                materialOverrides, tintProvider, mapColor,
+                materialOverrides, tintProvider, mapColor, transform,
                 x1, y0, z1, x1, y0, z0, x1, y1, z0, x1, y1, z1);
         return emitted;
     }
@@ -188,6 +189,7 @@ final class JsonModelEmitter {
             Map<String, ResolvedBlockMaterial> materialOverrides,
             IntFunction<Integer> tintProvider,
             Color mapColor,
+            Variant transform,
             float ax, float ay, float az,
             float bx, float by, float bz,
             float cx, float cy, float cz,
@@ -243,13 +245,13 @@ final class JsonModelEmitter {
         mesh.setAOs(start, 1F, 1F, 1F);
         mesh.setAOs(start + 1, 1F, 1F, 1F);
 
-        LightData own = block.getLightData();
-        int sky = own.getSkyLight();
-        int blockLight = Math.max(own.getBlockLight(), element.getLightEmission());
-        mesh.setSunlight(start, sky);
-        mesh.setSunlight(start + 1, sky);
-        mesh.setBlocklight(start, blockLight);
-        mesh.setBlocklight(start + 1, blockLight);
+        FaceLighting.Sample light = FaceLighting.sample(
+                block, direction, transform, element.getLightEmission()
+        );
+        mesh.setSunlight(start, light.sunlight());
+        mesh.setSunlight(start + 1, light.sunlight());
+        mesh.setBlocklight(start, light.blocklight());
+        mesh.setBlocklight(start + 1, light.blocklight());
 
         if (direction == Direction.UP) {
             Texture texture = resourcePack.getTextures().get(textureKey);

@@ -14,7 +14,6 @@ import de.bluecolored.bluemap.core.resources.pack.resourcepack.texture.Texture;
 import de.bluecolored.bluemap.core.util.Direction;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.util.math.Color;
-import de.bluecolored.bluemap.core.world.LightData;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
 
 import java.util.Map;
@@ -73,31 +72,39 @@ final class PrimitiveEmitter {
             Color mapColor
     ) {
         int start = target.getTileModel().size();
+        Variant transform = new Variant(
+                TRANSFORM_SENTINEL, xRotation, yRotation, zRotation
+        );
         boolean emitted = false;
         emitted |= quad(block, target, Direction.DOWN, materials.get(Direction.DOWN),
                 colorProvider.apply(Direction.DOWN),
-                minX, minY, minZ, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ, mapColor);
+                minX, minY, minZ, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ,
+                mapColor, transform);
         emitted |= quad(block, target, Direction.UP, materials.get(Direction.UP),
                 colorProvider.apply(Direction.UP),
-                minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ, minX, maxY, minZ, mapColor);
+                minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ, minX, maxY, minZ,
+                mapColor, transform);
         emitted |= quad(block, target, Direction.NORTH, materials.get(Direction.NORTH),
                 colorProvider.apply(Direction.NORTH),
-                maxX, minY, minZ, minX, minY, minZ, minX, maxY, minZ, maxX, maxY, minZ, mapColor);
+                maxX, minY, minZ, minX, minY, minZ, minX, maxY, minZ, maxX, maxY, minZ,
+                mapColor, transform);
         emitted |= quad(block, target, Direction.SOUTH, materials.get(Direction.SOUTH),
                 colorProvider.apply(Direction.SOUTH),
-                minX, minY, maxZ, maxX, minY, maxZ, maxX, maxY, maxZ, minX, maxY, maxZ, mapColor);
+                minX, minY, maxZ, maxX, minY, maxZ, maxX, maxY, maxZ, minX, maxY, maxZ,
+                mapColor, transform);
         emitted |= quad(block, target, Direction.WEST, materials.get(Direction.WEST),
                 colorProvider.apply(Direction.WEST),
-                minX, minY, minZ, minX, minY, maxZ, minX, maxY, maxZ, minX, maxY, minZ, mapColor);
+                minX, minY, minZ, minX, minY, maxZ, minX, maxY, maxZ, minX, maxY, minZ,
+                mapColor, transform);
         emitted |= quad(block, target, Direction.EAST, materials.get(Direction.EAST),
                 colorProvider.apply(Direction.EAST),
-                maxX, minY, maxZ, maxX, minY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ, mapColor);
+                maxX, minY, maxZ, maxX, minY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ,
+                mapColor, transform);
 
         int count = target.getTileModel().size() - start;
         if (count > 0 && (xRotation != 0F || yRotation != 0F || zRotation != 0F)) {
             target.initialize(start).transform(
-                    new Variant(TRANSFORM_SENTINEL, xRotation, yRotation, zRotation)
-                            .getTransformMatrix()
+                    transform.getTransformMatrix()
             );
         }
         target.initialize(start);
@@ -121,23 +128,25 @@ final class PrimitiveEmitter {
             Color mapColor
     ) {
         int start = target.getTileModel().size();
+        Variant transform = new Variant(
+                TRANSFORM_SENTINEL, xRotation, yRotation, zRotation
+        );
         boolean emitted = switch (direction) {
             case NORTH -> quad(
                     block, target, direction, texture, argb,
                     maxX, minY, depth, minX, minY, depth,
-                    minX, maxY, depth, maxX, maxY, depth, mapColor
+                    minX, maxY, depth, maxX, maxY, depth, mapColor, transform
             );
             case SOUTH -> quad(
                     block, target, direction, texture, argb,
                     minX, minY, depth, maxX, minY, depth,
-                    maxX, maxY, depth, minX, maxY, depth, mapColor
+                    maxX, maxY, depth, minX, maxY, depth, mapColor, transform
             );
             default -> false;
         };
         if (emitted && (xRotation != 0F || yRotation != 0F || zRotation != 0F)) {
             target.initialize(start).transform(
-                    new Variant(TRANSFORM_SENTINEL, xRotation, yRotation, zRotation)
-                            .getTransformMatrix()
+                    transform.getTransformMatrix()
             );
         }
         target.initialize(start);
@@ -154,7 +163,8 @@ final class PrimitiveEmitter {
             float bx, float by, float bz,
             float cx, float cy, float cz,
             float dx, float dy, float dz,
-            Color mapColor
+            Color mapColor,
+            Variant transform
     ) {
         Texture texture = textureKey == null ? null : resourcePack.getTextures().get(textureKey);
         if (texture == null) {
@@ -176,11 +186,11 @@ final class PrimitiveEmitter {
         mesh.setColor(start + 1, red, green, blue);
         mesh.setAOs(start, 1F, 1F, 1F);
         mesh.setAOs(start + 1, 1F, 1F, 1F);
-        LightData light = block.getLightData();
-        mesh.setSunlight(start, light.getSkyLight());
-        mesh.setSunlight(start + 1, light.getSkyLight());
-        mesh.setBlocklight(start, light.getBlockLight());
-        mesh.setBlocklight(start + 1, light.getBlockLight());
+        FaceLighting.Sample light = FaceLighting.sample(block, direction, transform, 0);
+        mesh.setSunlight(start, light.sunlight());
+        mesh.setSunlight(start + 1, light.sunlight());
+        mesh.setBlocklight(start, light.blocklight());
+        mesh.setBlocklight(start + 1, light.blocklight());
         if (direction == Direction.UP) {
             Color average = new Color().set(texture.getColorPremultiplied());
             average.r *= red;
