@@ -4,6 +4,7 @@
 package io.github.janguenter.bluemap.sophisticated.adapter.bluemap522;
 
 import de.bluecolored.bluemap.core.world.mca.blockentity.MCABlockEntity;
+import de.bluecolored.bluenbt.NBTName;
 
 /**
  * BlueNBT projection of the stable Sophisticated fields used by the map renderer.
@@ -11,15 +12,26 @@ import de.bluecolored.bluemap.core.world.mca.blockentity.MCABlockEntity;
  */
 public final class SophisticatedBlockEntityData extends MCABlockEntity {
 
+    @NBTName("storageWrapper")
     private Object storageWrapper;
     private Object materials;
+
+    @NBTName("woodType")
     private String woodType;
     private Boolean packed;
     private Boolean locked;
+
+    @NBTName("showLock")
     private Boolean showLock;
+
+    @NBTName("showTier")
     private Boolean showTier;
+
+    @NBTName("backpackData")
     private Object backpackData;
     private String material;
+
+    @NBTName("overlayHidden")
     private Boolean overlayHidden;
 
     public SophisticatedBlockEntityData() {
