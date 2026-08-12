@@ -1,0 +1,318 @@
+{
+  "profileId": "sophisticatedstorage",
+  "modId": "sophisticatedstorage",
+  "version": "1.5.83",
+  "implementationVersion": "1.21.1-1.5.83.2017",
+  "artifact": "sophisticatedstorage-1.21.1-1.5.83.2017.jar",
+  "sizeBytes": 1828640,
+  "sha1": "b36fa724fe925e715d8b13929d5789125e97e81b",
+  "sha256": "354f62ef885b3219fb0787d211582d7ea733800ff31787cc85b9af68d260b600",
+  "sha512": "af16494408c31e87a94e1d517c684b4b0c0fdb7ceaf6332ac1c281e18ee0cd9e0e87605f9a991b21ad737dff8eb83d5e0ac811983d881da5e56f989d344d46da",
+  "minecraft": "1.21.1",
+  "neoforge": "21.1.248",
+  "distribution": {
+    "provider": "CurseForge",
+    "projectId": 619320,
+    "fileId": 8503122
+  },
+  "metadata": {
+    "license": "All Rights Reserved",
+    "implementationTimestamp": "2026-07-24T23:33:25+0000",
+    "minecraftRange": "[1.21.1,1.21.2)",
+    "neoforgeRange": "[21.1.0,)",
+    "requiredDependencies": {
+      "sophisticatedcore": "[1.4.80,)"
+    }
+  },
+  "source": {
+    "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedStorage",
+    "correlationStatus": "unresolved-no-version-tag-or-build-attestation"
+  },
+  "schemaVersion": 1,
+  "coverage": {
+    "blockCount": 59,
+    "blockFamilies": {
+      "barrels": [
+        "sophisticatedstorage:barrel",
+        "sophisticatedstorage:copper_barrel",
+        "sophisticatedstorage:iron_barrel",
+        "sophisticatedstorage:gold_barrel",
+        "sophisticatedstorage:diamond_barrel",
+        "sophisticatedstorage:netherite_barrel"
+      ],
+      "limitedBarrels": [
+        "sophisticatedstorage:limited_barrel_1",
+        "sophisticatedstorage:limited_barrel_2",
+        "sophisticatedstorage:limited_barrel_3",
+        "sophisticatedstorage:limited_barrel_4",
+        "sophisticatedstorage:limited_copper_barrel_1",
+        "sophisticatedstorage:limited_copper_barrel_2",
+        "sophisticatedstorage:limited_copper_barrel_3",
+        "sophisticatedstorage:limited_copper_barrel_4",
+        "sophisticatedstorage:limited_iron_barrel_1",
+        "sophisticatedstorage:limited_iron_barrel_2",
+        "sophisticatedstorage:limited_iron_barrel_3",
+        "sophisticatedstorage:limited_iron_barrel_4",
+        "sophisticatedstorage:limited_gold_barrel_1",
+        "sophisticatedstorage:limited_gold_barrel_2",
+        "sophisticatedstorage:limited_gold_barrel_3",
+        "sophisticatedstorage:limited_gold_barrel_4",
+        "sophisticatedstorage:limited_diamond_barrel_1",
+        "sophisticatedstorage:limited_diamond_barrel_2",
+        "sophisticatedstorage:limited_diamond_barrel_3",
+        "sophisticatedstorage:limited_diamond_barrel_4",
+        "sophisticatedstorage:limited_netherite_barrel_1",
+        "sophisticatedstorage:limited_netherite_barrel_2",
+        "sophisticatedstorage:limited_netherite_barrel_3",
+        "sophisticatedstorage:limited_netherite_barrel_4"
+      ],
+      "chests": [
+        "sophisticatedstorage:chest",
+        "sophisticatedstorage:copper_chest",
+        "sophisticatedstorage:iron_chest",
+        "sophisticatedstorage:gold_chest",
+        "sophisticatedstorage:diamond_chest",
+        "sophisticatedstorage:netherite_chest"
+      ],
+      "shulkerBoxes": [
+        "sophisticatedstorage:shulker_box",
+        "sophisticatedstorage:copper_shulker_box",
+        "sophisticatedstorage:iron_shulker_box",
+        "sophisticatedstorage:gold_shulker_box",
+        "sophisticatedstorage:diamond_shulker_box",
+        "sophisticatedstorage:netherite_shulker_box"
+      ],
+      "networkBlocks": [
+        "sophisticatedstorage:controller",
+        "sophisticatedstorage:storage_link",
+        "sophisticatedstorage:storage_io",
+        "sophisticatedstorage:storage_input",
+        "sophisticatedstorage:storage_output"
+      ],
+      "storageConnectors": [
+        "sophisticatedstorage:acacia_storage_connector",
+        "sophisticatedstorage:bamboo_storage_connector",
+        "sophisticatedstorage:birch_storage_connector",
+        "sophisticatedstorage:cherry_storage_connector",
+        "sophisticatedstorage:crimson_storage_connector",
+        "sophisticatedstorage:dark_oak_storage_connector",
+        "sophisticatedstorage:jungle_storage_connector",
+        "sophisticatedstorage:mangrove_storage_connector",
+        "sophisticatedstorage:oak_storage_connector",
+        "sophisticatedstorage:spruce_storage_connector",
+        "sophisticatedstorage:warped_storage_connector"
+      ],
+      "utilityBlocks": [
+        "sophisticatedstorage:decoration_table"
+      ]
+    },
+    "supportedBlocks": [
+      "sophisticatedstorage:acacia_storage_connector",
+      "sophisticatedstorage:bamboo_storage_connector",
+      "sophisticatedstorage:barrel",
+      "sophisticatedstorage:birch_storage_connector",
+      "sophisticatedstorage:cherry_storage_connector",
+      "sophisticatedstorage:chest",
+      "sophisticatedstorage:controller",
+      "sophisticatedstorage:copper_barrel",
+      "sophisticatedstorage:copper_chest",
+      "sophisticatedstorage:copper_shulker_box",
+      "sophisticatedstorage:crimson_storage_connector",
+      "sophisticatedstorage:dark_oak_storage_connector",
+      "sophisticatedstorage:decoration_table",
+      "sophisticatedstorage:diamond_barrel",
+      "sophisticatedstorage:diamond_chest",
+      "sophisticatedstorage:diamond_shulker_box",
+      "sophisticatedstorage:gold_barrel",
+      "sophisticatedstorage:gold_chest",
+      "sophisticatedstorage:gold_shulker_box",
+      "sophisticatedstorage:iron_barrel",
+      "sophisticatedstorage:iron_chest",
+      "sophisticatedstorage:iron_shulker_box",
+      "sophisticatedstorage:jungle_storage_connector",
+      "sophisticatedstorage:limited_barrel_1",
+      "sophisticatedstorage:limited_barrel_2",
+      "sophisticatedstorage:limited_barrel_3",
+      "sophisticatedstorage:limited_barrel_4",
+      "sophisticatedstorage:limited_copper_barrel_1",
+      "sophisticatedstorage:limited_copper_barrel_2",
+      "sophisticatedstorage:limited_copper_barrel_3",
+      "sophisticatedstorage:limited_copper_barrel_4",
+      "sophisticatedstorage:limited_diamond_barrel_1",
+      "sophisticatedstorage:limited_diamond_barrel_2",
+      "sophisticatedstorage:limited_diamond_barrel_3",
+      "sophisticatedstorage:limited_diamond_barrel_4",
+      "sophisticatedstorage:limited_gold_barrel_1",
+      "sophisticatedstorage:limited_gold_barrel_2",
+      "sophisticatedstorage:limited_gold_barrel_3",
+      "sophisticatedstorage:limited_gold_barrel_4",
+      "sophisticatedstorage:limited_iron_barrel_1",
+      "sophisticatedstorage:limited_iron_barrel_2",
+      "sophisticatedstorage:limited_iron_barrel_3",
+      "sophisticatedstorage:limited_iron_barrel_4",
+      "sophisticatedstorage:limited_netherite_barrel_1",
+      "sophisticatedstorage:limited_netherite_barrel_2",
+      "sophisticatedstorage:limited_netherite_barrel_3",
+      "sophisticatedstorage:limited_netherite_barrel_4",
+      "sophisticatedstorage:mangrove_storage_connector",
+      "sophisticatedstorage:netherite_barrel",
+      "sophisticatedstorage:netherite_chest",
+      "sophisticatedstorage:netherite_shulker_box",
+      "sophisticatedstorage:oak_storage_connector",
+      "sophisticatedstorage:shulker_box",
+      "sophisticatedstorage:spruce_storage_connector",
+      "sophisticatedstorage:storage_input",
+      "sophisticatedstorage:storage_io",
+      "sophisticatedstorage:storage_link",
+      "sophisticatedstorage:storage_output",
+      "sophisticatedstorage:warped_storage_connector"
+    ],
+    "renderPose": "closed-neutral-static"
+  },
+  "resourceClosure": {
+    "manifest": "required-resources.tsv",
+    "format": "path-tab-bytes-tab-sha256-lf",
+    "pathCount": 430,
+    "totalBytes": 491935,
+    "manifestSha256": "95be6bc7e6d27a555823bade8d65f7757c4576c58b0634bcc76866232dfbd627",
+    "selection": "stable exterior blockstates, block models, closed/static block textures, chest entity textures and shulker entity textures",
+    "excludedPatterns": [
+      "assets/sophisticatedstorage/textures/block/break/**",
+      "assets/sophisticatedstorage/textures/block/*_open.png"
+    ],
+    "excludedPaths": [
+      "assets/sophisticatedstorage/textures/block/fill_indicators.png"
+    ]
+  },
+  "persistentVisualContract": {
+    "storageBlockEntity": {
+      "wrapperCompound": "storageWrapper",
+      "wrapperColorKeys": {
+        "main": "mainColor",
+        "accent": "accentColor",
+        "missingSentinel": -1
+      },
+      "stableFlags": {
+        "locked": "locked",
+        "showLock": "showLock",
+        "showTier": "showTier",
+        "packed": "packed",
+        "woodType": "woodType"
+      },
+      "ignoredMutableFlag": "showUpgrades"
+    },
+    "barrelMaterials": {
+      "compound": "materials",
+      "leafKeys": [
+        "side",
+        "side_trim",
+        "bottom",
+        "bottom_trim",
+        "top",
+        "top_trim",
+        "top_inner_trim"
+      ],
+      "aggregateExpansion": {
+        "all": [
+          "side",
+          "side_trim",
+          "bottom",
+          "bottom_trim",
+          "top",
+          "top_trim",
+          "top_inner_trim"
+        ],
+        "all_trim": [
+          "side_trim",
+          "bottom_trim",
+          "top_trim",
+          "top_inner_trim"
+        ],
+        "all_but_trim": [
+          "side",
+          "bottom",
+          "top"
+        ],
+        "top_all": [
+          "top",
+          "top_trim",
+          "top_inner_trim"
+        ],
+        "side_all": [
+          "side",
+          "side_trim"
+        ],
+        "bottom_all": [
+          "bottom",
+          "bottom_trim"
+        ]
+      },
+      "valueType": "resource-location identifying a source block whose default material is delegated to BlueMap"
+    },
+    "simpleMaterials": {
+      "blocks": [
+        "sophisticatedstorage:controller",
+        "sophisticatedstorage:storage_link",
+        "sophisticatedstorage:storage_io",
+        "sophisticatedstorage:storage_input",
+        "sophisticatedstorage:storage_output",
+        "sophisticatedstorage:*_storage_connector"
+      ],
+      "materialKey": "material",
+      "overlayHiddenKey": "overlayHidden",
+      "valueType": "resource-location identifying a source block whose default material is delegated to BlueMap"
+    },
+    "stableBlockState": {
+      "barrel": [
+        "facing",
+        "flat_top",
+        "opaque"
+      ],
+      "limitedBarrel": [
+        "facing",
+        "vertical_facing",
+        "flat_top",
+        "opaque"
+      ],
+      "chest": [
+        "facing",
+        "type"
+      ],
+      "shulkerBox": [
+        "facing"
+      ],
+      "storageLink": [
+        "facing",
+        "opaque"
+      ],
+      "otherSimpleMaterialBlocks": [
+        "opaque"
+      ]
+    },
+    "tintIndices": {
+      "barrelMain": 1000,
+      "barrelAccent": 1001
+    },
+    "includedOptics": [
+      "tier geometry and tier textures",
+      "main/accent dyes",
+      "wood type and packed skin",
+      "lock overlay when locked and showLock are true",
+      "tier overlay when showTier is true",
+      "closed single/left/right chest topology",
+      "barrel per-face material camouflage",
+      "controller/link/I-O/connector material camouflage and overlayHidden"
+    ],
+    "excludedMutableState": [
+      "open/lid animation",
+      "ticking/activity",
+      "inventory items and display items",
+      "item counts and fill ratios",
+      "fill indicator texture",
+      "upgrade item icons and upgrade render data",
+      "controller linkage/runtime reachability",
+      "fluids, energy and progress"
+    ],
+    "fallbackPolicy": "Any malformed persisted value, unsupported state combination, invalid material resource location, missing delegated material/model/texture, or incomplete paired chest uses atomic whole-block stock fallback with no partial custom geometry."
+  }
+}

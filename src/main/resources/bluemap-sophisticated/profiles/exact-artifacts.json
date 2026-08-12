@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "baseline": {
+    "pack": "All the Mons",
+    "packVersion": "1.2.0",
+    "packRepositoryCommit": "c7bb230f21d14d26859d0b92548f089b3a493ad9",
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.248",
+    "packExport": {
+      "filename": "All the Mons-1.2.0.zip",
+      "sizeBytes": 83490444,
+      "sha256": "1d37df201daddecf5454115f5205cca15ca6ab84ed102bcc2e312f4c14876e5d",
+      "curseForgeProjectId": 1356598,
+      "curseForgeFileId": 8572588
+    },
+    "manifestEvidence": "All the Mons-1.2.0.zip!/manifest.json",
+    "runtimeEvidence": "ServerFiles-1.2.0.zip!/mods"
+  },
+  "requiredForStaticRendering": [
+    "sophisticatedstorage",
+    "sophisticatedbackpacks",
+    "sophisticatedcore"
+  ],
+  "artifacts": [
+    {
+      "modId": "sophisticatedstorage",
+      "metadataVersion": "1.5.83",
+      "implementationVersion": "1.21.1-1.5.83.2017",
+      "implementationTimestamp": "2026-07-24T23:33:25+0000",
+      "filename": "sophisticatedstorage-1.21.1-1.5.83.2017.jar",
+      "sizeBytes": 1828640,
+      "sha1": "b36fa724fe925e715d8b13929d5789125e97e81b",
+      "sha256": "354f62ef885b3219fb0787d211582d7ea733800ff31787cc85b9af68d260b600",
+      "sha512": "af16494408c31e87a94e1d517c684b4b0c0fdb7ceaf6332ac1c281e18ee0cd9e0e87605f9a991b21ad737dff8eb83d5e0ac811983d881da5e56f989d344d46da",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 619320,
+      "curseForgeFileId": 8503122,
+      "verificationRole": "required-static-render-input",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedStorage",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 2017 to a public commit."
+      }
+    },
+    {
+      "modId": "sophisticatedbackpacks",
+      "metadataVersion": "3.25.73",
+      "implementationVersion": "1.21.1-3.25.73.2027",
+      "implementationTimestamp": "2026-08-03T14:11:44+0000",
+      "filename": "sophisticatedbackpacks-1.21.1-3.25.73.2027.jar",
+      "sizeBytes": 1144235,
+      "sha1": "e8baceab12d01ff170e7dcf3ab2079206d1407fd",
+      "sha256": "ded30f9269a92cc295ab0a735a86770ca097c30198b8f3f2288ecaac6542b93e",
+      "sha512": "fe92bd732f19d71818ba339cc3799645181c9dadbe669f99284125b6c96f70ed1f96bc4b91dfcf9220cc01a19c1dbfdcf95650bbd8e8166133c40d2660b90805",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 422301,
+      "curseForgeFileId": 8569661,
+      "verificationRole": "required-static-render-input",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedBackpacks",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 2027 to a public commit."
+      }
+    },
+    {
+      "modId": "sophisticatedcore",
+      "metadataVersion": "1.4.80",
+      "implementationVersion": "1.21.1-1.4.80.2194",
+      "implementationTimestamp": "2026-07-24T23:16:40+0000",
+      "filename": "sophisticatedcore-1.21.1-1.4.80.2194.jar",
+      "sizeBytes": 1673669,
+      "sha1": "bef1d5186feaed80b11bd1e6f2dc880e8bec0449",
+      "sha256": "58a35e74642de9a7ffd39604f06903df39c166d332551c5770ca2e21685defc0",
+      "sha512": "277d93609e53a70e693f3b492e37b537534e06be3f24313f3930c1bca4d6c556c2cc54e6a2f4d03622b9acbbc4ac29766df80941a93dae245890c5ecf52851ea",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 618298,
+      "curseForgeFileId": 8503041,
+      "verificationRole": "required-static-render-input",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedCore",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 2194 to a public commit."
+      }
+    },
+    {
+      "modId": "sophisticatedbackpackscreateintegration",
+      "metadataVersion": "0.1.8",
+      "implementationVersion": "1.21.1-0.1.8.134",
+      "implementationTimestamp": "2026-07-09T08:10:58+0000",
+      "filename": "sophisticatedbackpackscreateintegration-1.21.1-0.1.8.134.jar",
+      "sizeBytes": 82627,
+      "sha1": "d574c93098fe1189bf21eccaaff97d7a58798b8a",
+      "sha256": "f396364bfb146d05c1c44d21431f357b68742699cf49e6f8815751db129dc068",
+      "sha512": "953ecfe402bb2b622ba649d9e0461a07864b90e1ef107f1f97d069a7c0e415c682835d8627e5cd6887925ef7a99c4939ae1d202872b23f93f200db3727cc760b",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 1238567,
+      "curseForgeFileId": 8398818,
+      "verificationRole": "context-only-excluded-moving-contraption",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedBackpacksCreateIntegration",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 134 to a public commit."
+      }
+    },
+    {
+      "modId": "sophisticatedstoragecreateintegration",
+      "metadataVersion": "0.1.21",
+      "implementationVersion": "1.21.1-0.1.21.209",
+      "implementationTimestamp": "2026-07-24T23:41:49+0000",
+      "filename": "sophisticatedstoragecreateintegration-1.21.1-0.1.21.209.jar",
+      "sizeBytes": 134163,
+      "sha1": "d8f72f22459750496008a7c2a39dc865152d075c",
+      "sha256": "0b8b13cd120d45525c4df8b465adf5d381b1ed4518b72a005a3b426c6c980d9b",
+      "sha512": "979bb431e2db4df5836ff21e8c0f6b78c372afcabdcdb795e741d7c7487764af5803f6ca5f80944d987986b906cda9aaa884b8a6db00de092732752e7097f2bb",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 1226755,
+      "curseForgeFileId": 8503147,
+      "verificationRole": "context-only-excluded-moving-contraption",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedStorageCreateIntegration",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 209 to a public commit."
+      }
+    },
+    {
+      "modId": "sophisticatedstorageinmotion",
+      "metadataVersion": "0.10.33",
+      "implementationVersion": "1.21.1-0.10.33.324",
+      "implementationTimestamp": "2026-07-14T23:00:36+0000",
+      "filename": "sophisticatedstorageinmotion-1.21.1-0.10.33.324.jar",
+      "sizeBytes": 409586,
+      "sha1": "3ce07b64a52db90416bfe598b95d31c6bc368bc2",
+      "sha256": "4162a128bced3ff9455a4926627b9d2d80029ddd710dfec6659f793322632290",
+      "sha512": "88bf503eba0eb328085b34fb03484c6ceddb3c768136b26fb71429a39ffa08b62325c96e316895878daeeb84df7bebb1a8f8bc3a83d66e73d226746454394cab",
+      "license": "All Rights Reserved",
+      "curseForgeProjectId": 1166930,
+      "curseForgeFileId": 8434254,
+      "verificationRole": "context-only-excluded-moving-entity",
+      "referenceRepository": "https://github.com/P3pp3rF1y/SophisticatedStorageInMotion",
+      "sourceCorrelation": {
+        "status": "unresolved",
+        "reason": "No immutable version tag or build attestation in local evidence maps CI build 324 to a public commit."
+      }
+    }
+  ]
+}

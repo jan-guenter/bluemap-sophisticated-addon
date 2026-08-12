@@ -1,0 +1,6 @@
+{
+  "id": "bluemap-sophisticated",
+  "entrypoint": "io.github.janguenter.bluemap.sophisticated.BlueMapSophisticatedAddon",
+  "dependencies": [],
+  "soft-dependencies": []
+}
