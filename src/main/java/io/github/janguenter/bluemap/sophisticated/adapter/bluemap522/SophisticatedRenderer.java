@@ -1040,19 +1040,25 @@ final class SophisticatedRenderer implements BlockRenderer {
         return Map.copyOf(textures);
     }
 
-    private static void aliasBarrelTextures(Map<String, Key> textures) {
+    static void aliasBarrelTextures(Map<String, Key> textures) {
         Key top = textures.get("top");
         Key side = textures.get("side");
         Key bottom = textures.get("bottom");
         if (top != null) {
+            textures.putIfAbsent("up", top);
             textures.putIfAbsent("top_trim", top);
             textures.putIfAbsent("top_inner_trim", top);
             textures.putIfAbsent("particle", top);
         }
         if (side != null) {
+            textures.putIfAbsent("north", side);
+            textures.putIfAbsent("east", side);
+            textures.putIfAbsent("south", side);
+            textures.putIfAbsent("west", side);
             textures.putIfAbsent("side_trim", side);
         }
         if (bottom != null) {
+            textures.putIfAbsent("down", bottom);
             textures.putIfAbsent("bottom_trim", bottom);
         }
     }
