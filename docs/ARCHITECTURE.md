@@ -6,7 +6,7 @@ It is not a NeoForge mod and never loads Minecraft's client renderer.
 ```text
 BlueMap add-on entrypoint
         |
-exact BlueMap 5.22 internal-ABI adapter
+exact BlueMap 5.23 feature-backport adapter
         |
 exact Sophisticated Core byte gate
         |
@@ -49,8 +49,10 @@ dynamic upstream renderers.
 
 ## Resource ownership
 
-The production JAR owns only its entrypoint, adapter/renderer code, synthetic
-dispatch blockstate, exact identity/profile facts, and resource path/size/hash
-manifests. BlueMap and all Minecraft/mod resources remain operator supplied.
-This keeps the project clean-room MIT despite the Sophisticated artifacts'
-All Rights Reserved declarations.
+The production JAR owns only its entrypoint, adapter/renderer code, the four
+exact source-compiled Adapter API primitives, synthetic dispatch blockstate,
+exact identity/profile facts, and resource path/size/hash manifests. No
+standalone Adapter API JAR is bundled or installed. BlueMap and all
+Minecraft/mod resources remain operator supplied. This keeps the project
+clean-room MIT despite the Sophisticated artifacts' All Rights Reserved
+declarations.

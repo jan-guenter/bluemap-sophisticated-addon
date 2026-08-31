@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: MIT
  */
-package io.github.janguenter.bluemap.sophisticated.adapter.bluemap522;
+package io.github.janguenter.bluemap.sophisticated.adapter.bluemap523;
 
 import de.bluecolored.bluemap.core.world.mca.MCAUtil;
 import de.bluecolored.bluenbt.BlueNBT;

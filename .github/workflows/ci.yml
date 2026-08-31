@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PROMOTION_JAVA_VERSION: '21.0.12+8.0.LTS'
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -28,27 +31,38 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: jan-guenter/BlueMap
-          ref: 9be321df995a1103808621d529eb72773e719d4d
+          ref: 7e07f4e74ec1e92a6ead9aa1e66054af3e133aac
           path: .ci/bluemap
           submodules: recursive
+          fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Java 21
+      - name: Verify exact detached BlueMap identities
+        run: |
+          test "$(git -C .ci/bluemap rev-parse --abbrev-ref HEAD)" = "HEAD"
+          test "$(git -C .ci/bluemap rev-parse HEAD)" = \
+            "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac"
+          test "$(git -C .ci/bluemap/api rev-parse HEAD)" = \
+            "285c9a60eff3ac2b0cab308ce1058d1565be0971"
+
+      - name: Set up exact promotion Java 21
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: ${{ env.PROMOTION_JAVA_VERSION }}
 
       - name: Set up Python 3.13
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.13'
 
-      - name: Set up Gradle 9.4.0
+      - name: Set up Gradle 9.6.1
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
-          gradle-version: '9.4.0'
+          gradle-version: '9.6.1'
+          cache-provider: basic
           cache-read-only: ${{ github.event_name == 'pull_request' }}
+          validate-wrappers: true
 
       - name: Acquire exact ephemeral runtime inputs
         run: |
@@ -69,6 +83,7 @@ jobs:
           input_dir="${RUNNER_TEMP}/sophisticated"
           python3 gallery/generate.py --check
           python3 -m json.tool provenance/upstreams.json >/dev/null
+          python3 -m json.tool provenance/release.json >/dev/null
           (cd gallery && sha256sum --check SHA256SUMS)
           python3 -m unittest discover -s tools/tests -p 'test_*.py'
           gradle --no-daemon \
