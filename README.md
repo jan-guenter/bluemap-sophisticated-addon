@@ -2,19 +2,29 @@
 
 [![CI](https://github.com/jan-guenter/bluemap-sophisticated-addon/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jan-guenter/bluemap-sophisticated-addon/actions/workflows/ci.yml)
 
-An exact-profile BlueMap 5.22 add-on for the stable world appearance of
-Sophisticated Storage and Sophisticated Backpacks.
+An exact-profile BlueMap 5.23 feature-backport add-on for the stable world
+appearance of Sophisticated Storage and Sophisticated Backpacks.
 
 ## Status and compatibility
 
-Version `0.1.0-alpha.1` is the owner-accepted prerelease for one environment:
+Version `0.1.0-alpha.2` is an unpublished BlueMap 5.23 adapter migration
+candidate for the same owner-accepted rendering scope. Version
+`0.1.0-alpha.1` remains the latest published release.
 
 - All the Mons `1.2.0`, Minecraft `1.21.1`, NeoForge `21.1.248`, Java `21`;
-- BlueMap backport `5.22-agent.backport-5.22-mc1.21.1-2` at
-  `9be321df995a1103808621d529eb72773e719d4d`;
+- BlueMap feature backport
+  `5.22-feature.backport-5.23-stateless-java-web-server-46`, commit
+  `7e07f4e74ec1e92a6ead9aa1e66054af3e133aac`, API commit
+  `285c9a60eff3ac2b0cab308ce1058d1565be0971`;
 - Sophisticated Core `1.4.80.2194`;
 - Sophisticated Storage `1.5.83.2017`;
 - Sophisticated Backpacks `3.25.73.2027`.
+
+The candidate compiles the four exact BlueMap 5.23 Adapter API sources from
+commit `e81f08bc4bfbf02d810ec8949a019130e2e61634` and source tree
+`2f974c9bb2ba13888d69682f86f30f58922d30eb`. It does not bundle or install a
+standalone Adapter API JAR. Renderer, profile, resource, gallery, and stock
+fallback behavior remain local and unchanged.
 
 The runtime checks exact JAR sizes and SHA-256 hashes. A same-named or
 same-version file with different bytes stays inactive. Storage and Backpacks
@@ -42,15 +52,18 @@ See [coverage](docs/COVERAGE.md), [architecture](docs/ARCHITECTURE.md),
 
 ## Build
 
-Use Java 21 and the exact sibling BlueMap checkout. Supply the exact three
-operator-downloaded JARs to the single authoritative gate:
+Clone with submodules, then use Java 21, Gradle 9.6.1, and the exact sibling
+BlueMap checkout. Supply the exact three operator-downloaded JARs to the
+single authoritative gate:
 
 ```bash
 gradle --no-daemon \
+  -PbluemapSourcePath=/absolute/path/to/bluemap-backport \
   -PsophisticatedCoreJar=/absolute/path/sophisticatedcore-1.21.1-1.4.80.2194.jar \
   -PsophisticatedStorageJar=/absolute/path/sophisticatedstorage-1.21.1-1.5.83.2017.jar \
   -PsophisticatedBackpacksJar=/absolute/path/sophisticatedbackpacks-1.21.1-3.25.73.2027.jar \
-  clean check build generatePomFileForAddonPublication verifyPinnedArtifacts
+  clean check build generatePomFileForAddonPublication \
+  generateMetadataFileForAddonPublication verifyPinnedArtifacts
 ```
 
 The build never redistributes those inputs. CI downloads them ephemerally,

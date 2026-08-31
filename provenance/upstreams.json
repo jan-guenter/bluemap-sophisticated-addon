@@ -9,13 +9,34 @@
     "neoforge": "21.1.248",
     "java": 21
   },
+  "accepted_release": {
+    "version": "0.1.0-alpha.1",
+    "date": "2026-08-12",
+    "tag": "v0.1.0-alpha.1",
+    "commit": "a75b1d82c3987fa9360a1e8a5910eedf90aca7cb",
+    "tree": "f6c997921ec659d541b7dbef031434c7f61baadc",
+    "production_jar_size": 114309,
+    "production_jar_sha256": "d466d6b40fc1f51a8e045ba34631354fd181681aa8363b4f0649ec1c83227036",
+    "owner_visual_acceptance": true
+  },
   "bluemap": {
-    "backport_version": "5.22-agent.backport-5.22-mc1.21.1-2",
-    "backport_commit": "9be321df995a1103808621d529eb72773e719d4d",
+    "backport_version": "5.22-feature.backport-5.23-stateless-java-web-server-46",
+    "backport_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
     "api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
-    "release_jar_sha256": "749f7647fa29764cea113114a7ab3259271bab3da22720989f2bd9fd1f3ba150",
+    "release_jar_size": 6545661,
+    "release_jar_sha256": "86a0323d24f472e425dda4d4e6bba2d7d8ce8315ad009930a67131128c715e62",
     "declared_license": "MIT",
     "bundled": false
+  },
+  "adapter_api": {
+    "repository": "https://github.com/jan-guenter/bluemap-addon-adapter-api",
+    "version": "0.1.0-alpha.2",
+    "tag": "v0.1.0-alpha.2",
+    "commit": "e81f08bc4bfbf02d810ec8949a019130e2e61634",
+    "source_tree": "2f974c9bb2ba13888d69682f86f30f58922d30eb",
+    "integration": "exact-gitlink-pinned-sources",
+    "compiled_source_count": 4,
+    "standalone_jar_bundled": false
   },
   "artifacts": {
     "sophisticatedcore": {

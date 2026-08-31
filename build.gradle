@@ -14,6 +14,10 @@ base {
     archivesName = artifact_id
 }
 
+sourceSets {
+    main.java.srcDir 'modules/bluemap-addon-adapter-api/src/main/java'
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -34,6 +38,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar).configure {
+    includeEmptyDirs = false
     manifest {
         attributes(
                 'Automatic-Module-Name': 'io.github.janguenter.bluemap.sophisticated',
@@ -59,6 +64,7 @@ tasks.named('jar', Jar).configure {
 }
 
 tasks.named('sourcesJar', Jar).configure {
+    includeEmptyDirs = false
     from('LICENSE') {
         into 'META-INF'
         rename { 'LICENSE-bluemap-sophisticated-addon' }
@@ -77,6 +83,29 @@ tasks.named('sourcesJar', Jar).configure {
 }
 
 def productionJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+def publishedSourcesJar = tasks.named('sourcesJar', Jar).flatMap { it.archiveFile }
+def sharedAdapterApiPackage =
+        'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/'
+def sharedAdapterApiClasses = [
+        'BlueMapRuntimeCompatibility.class',
+        'RegistryGuard.class',
+        'ResourceExtensionType.class',
+        'SyntheticDispatch.class'
+].collect { sharedAdapterApiPackage + it }
+def sharedAdapterApiSources = [
+        'BlueMapRuntimeCompatibility.java',
+        'RegistryGuard.java',
+        'ResourceExtensionType.java',
+        'SyntheticDispatch.java'
+].collect { sharedAdapterApiPackage + it }
+def legacyLocalAdapterPackage =
+        'io/github/janguenter/bluemap/sophisticated/adapter/bluemap522/'
+def displacedAdapterHelpers = [
+        'io/github/janguenter/bluemap/sophisticated/adapter/bluemap523/AdapterCompatibility',
+        'io/github/janguenter/bluemap/sophisticated/adapter/bluemap523/'
+                + 'SophisticatedResourceExtensionType'
+]
+
 tasks.register('verifyProductionJar') {
     dependsOn tasks.named('jar')
     inputs.file(productionJar)
@@ -100,9 +129,17 @@ tasks.register('verifyProductionJar') {
                     'META-INF/THIRD_PARTY-bluemap-sophisticated-addon.md',
                     'META-INF/bluemap-sophisticated/upstreams.json'
             ]
+            required.addAll(sharedAdapterApiClasses)
             def missing = required.findAll { !entries.contains(it) }
-            if (!missing.isEmpty()) {
-                throw new GradleException("Production JAR is missing: ${missing}")
+            def nonUniqueShared = sharedAdapterApiClasses.findAll { shared ->
+                entries.count { it == shared } != 1
+            }
+            def foreignClasses = entries.findAll { entry ->
+                entry.endsWith('.class')
+                        && !entry.startsWith(
+                            'io/github/janguenter/bluemap/sophisticated/'
+                        )
+                        && !sharedAdapterApiClasses.contains(entry)
             }
             def addon = new groovy.json.JsonSlurper().parseText(
                     zip.getInputStream(zip.getEntry('bluemap.addon.json')).getText('UTF-8')
@@ -122,9 +159,18 @@ tasks.register('verifyProductionJar') {
                         || it.startsWith('net/p3pp3rf1y/')
                         || it.startsWith('net/minecraft/')
                         || it.startsWith('net/neoforged/')
+                        || it.startsWith(legacyLocalAdapterPackage)
+                        || displacedAdapterHelpers.any { helper -> it.startsWith(helper) }
+                        || (it.startsWith(sharedAdapterApiPackage)
+                            && !sharedAdapterApiClasses.contains(it))
             }
-            if (!forbidden.isEmpty()) {
-                throw new GradleException("Production JAR contains forbidden entries: ${forbidden}")
+            if (!missing.isEmpty() || !nonUniqueShared.isEmpty()
+                    || !foreignClasses.isEmpty() || !forbidden.isEmpty()) {
+                throw new GradleException(
+                        "Production JAR boundary mismatch: missing=${missing}, "
+                                + "nonUniqueShared=${nonUniqueShared}, "
+                                + "foreignClasses=${foreignClasses}, forbidden=${forbidden}"
+                )
             }
         } finally {
             zip.close()
@@ -132,8 +178,148 @@ tasks.register('verifyProductionJar') {
     }
 }
 
+tasks.register('verifySourcesJar') {
+    dependsOn tasks.named('sourcesJar')
+    inputs.file(publishedSourcesJar)
+
+    doLast {
+        def zip = new java.util.zip.ZipFile(inputs.files.singleFile)
+        try {
+            def entries = zip.entries().findAll { !it.directory }.collect { it.name }
+            def required = [
+                    'io/github/janguenter/bluemap/sophisticated/'
+                            + 'BlueMapSophisticatedAddon.java',
+                    'bluemap.addon.json',
+                    'META-INF/LICENSE-bluemap-sophisticated-addon',
+                    'META-INF/bluemap-sophisticated/upstreams.json'
+            ]
+            required.addAll(sharedAdapterApiSources)
+            def missing = required.findAll { !entries.contains(it) }
+            def nonUniqueShared = sharedAdapterApiSources.findAll { shared ->
+                entries.count { it == shared } != 1
+            }
+            def foreignJava = entries.findAll { entry ->
+                entry.endsWith('.java')
+                        && !entry.startsWith(
+                            'io/github/janguenter/bluemap/sophisticated/'
+                        )
+                        && !sharedAdapterApiSources.contains(entry)
+            }
+            def forbidden = entries.findAll { entry ->
+                entry.endsWith('.class')
+                        || entry.endsWith('.jar')
+                        || entry.startsWith(legacyLocalAdapterPackage)
+                        || displacedAdapterHelpers.any { helper ->
+                            entry == "${helper}.java"
+                        }
+                        || (entry.startsWith(sharedAdapterApiPackage)
+                            && !sharedAdapterApiSources.contains(entry))
+            }
+            if (!missing.isEmpty() || !nonUniqueShared.isEmpty()
+                    || !foreignJava.isEmpty() || !forbidden.isEmpty()) {
+                throw new GradleException(
+                        "Sources JAR boundary mismatch: missing=${missing}, "
+                                + "nonUniqueShared=${nonUniqueShared}, "
+                                + "foreignJava=${foreignJava}, forbidden=${forbidden}"
+                )
+            }
+        } finally {
+            zip.close()
+        }
+    }
+}
+
+def verifyAcceptedFile = { File candidate, String sizeProperty, String hashProperty ->
+    def expectedSize = providers.gradleProperty(sizeProperty).get().toLong()
+    def expectedSha256 = providers.gradleProperty(hashProperty).get()
+    def actualSha256 = java.security.MessageDigest.getInstance('SHA-256')
+            .digest(candidate.bytes)
+            .encodeHex()
+            .toString()
+    if (expectedSize <= 0 || expectedSha256 == 'PENDING') {
+        throw new GradleException(
+                "Release identity ${sizeProperty}/${hashProperty} is unsealed"
+        )
+    }
+    if (candidate.length() != expectedSize || actualSha256 != expectedSha256) {
+        throw new GradleException(
+                "Accepted artifact mismatch for ${candidate}: "
+                        + "${candidate.length()} bytes, SHA-256 ${actualSha256}"
+        )
+    }
+}
+
+tasks.register('verifyAcceptedProductionJar') {
+    dependsOn tasks.named('jar')
+    inputs.file(productionJar)
+    doLast {
+        verifyAcceptedFile(
+                inputs.files.singleFile,
+                'accepted_jar_size',
+                'accepted_jar_sha256'
+        )
+    }
+}
+
+tasks.register('verifyAcceptedSourcesJar') {
+    dependsOn tasks.named('sourcesJar')
+    inputs.file(publishedSourcesJar)
+    doLast {
+        verifyAcceptedFile(
+                inputs.files.singleFile,
+                'accepted_sources_jar_size',
+                'accepted_sources_jar_sha256'
+        )
+    }
+}
+
+tasks.register('verifyPublicationArtifacts') {
+    dependsOn tasks.named('generatePomFileForAddonPublication')
+    dependsOn tasks.named('generateMetadataFileForAddonPublication')
+    doLast {
+        verifyAcceptedFile(
+                file('build/publications/addon/pom-default.xml'),
+                'accepted_pom_size',
+                'accepted_pom_sha256'
+        )
+        verifyAcceptedFile(
+                file('build/publications/addon/module.json'),
+                'accepted_module_size',
+                'accepted_module_sha256'
+        )
+    }
+}
+
+tasks.register('verifyReleaseMetadata') {
+    doLast {
+        def expectedTag = "v${project.version}"
+        def requestedTag = providers.gradleProperty('releaseTag').getOrElse('')
+        def release = new groovy.json.JsonSlurper().parse(file('provenance/release.json'))
+        if (requestedTag != expectedTag
+                || release.status != 'owner-accepted-release-candidate'
+                || release.published != false
+                || release.version != project.version.toString()
+                || release.tag != expectedTag
+                || !(release.owner_accepted_staging instanceof Map)
+                || release.owner_accepted_staging.visual_acceptance != true
+                || !(release.final_release_artifacts instanceof Map)) {
+            throw new GradleException('Release provenance is not sealed')
+        }
+    }
+}
+
+tasks.register('verifyReleaseCandidate') {
+    dependsOn tasks.named('check')
+    dependsOn tasks.named('verifyPinnedArtifacts')
+    dependsOn tasks.named('verifyAcceptedProductionJar')
+    dependsOn tasks.named('verifyAcceptedSourcesJar')
+    dependsOn tasks.named('verifyPublicationArtifacts')
+    dependsOn tasks.named('verifyReleaseMetadata')
+}
+
 tasks.named('check').configure {
     dependsOn tasks.named('verifyProductionJar')
+    dependsOn tasks.named('verifySourcesJar')
 }
 
 tasks.register('verifyPinnedArtifacts', Exec) {

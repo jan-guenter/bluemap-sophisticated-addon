@@ -1,16 +1,15 @@
 /*
  * SPDX-License-Identifier: MIT
  */
-package io.github.janguenter.bluemap.sophisticated.adapter.bluemap522;
+package io.github.janguenter.bluemap.sophisticated.adapter.bluemap523;
 
+import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import de.bluecolored.bluemap.core.resources.pack.resourcepack.ResourcePack;
 import de.bluecolored.bluemap.core.resources.pack.resourcepack.ResourcePackExtension;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.Variant;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.VariantSet;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.Variants;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.world.BlockProperties;
 import de.bluecolored.bluemap.core.world.BlockState;
+import io.github.janguenter.bluemap.addon.adapter.api.bluemap523.SyntheticDispatch;
 import io.github.janguenter.bluemap.sophisticated.activation.SophisticatedRuntime;
 import io.github.janguenter.bluemap.sophisticated.profile.ExactModArtifactDetector;
 import io.github.janguenter.bluemap.sophisticated.profile.ProfileDisablement;
@@ -29,10 +28,16 @@ final class SophisticatedResourceExtension implements ResourcePackExtension {
     private static final Key SYNTHETIC = Key.parse("bluemap_sophisticated:sophisticated_shape");
 
     private final ResourcePack resourcePack;
+    private final BlockRendererType renderer;
     private final SophisticatedRuntime runtime;
 
-    SophisticatedResourceExtension(ResourcePack resourcePack, SophisticatedRuntime runtime) {
+    SophisticatedResourceExtension(
+            ResourcePack resourcePack,
+            BlockRendererType renderer,
+            SophisticatedRuntime runtime
+    ) {
         this.resourcePack = resourcePack;
+        this.renderer = renderer;
         this.runtime = runtime;
     }
 
@@ -77,7 +82,7 @@ final class SophisticatedResourceExtension implements ResourcePackExtension {
 
         de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.BlockState dispatch =
                 resourcePack.getBlockStates().get(SYNTHETIC);
-        if (!validDispatch(dispatch)) {
+        if (!SyntheticDispatch.matches(dispatch, renderer)) {
             runtime.route("storage").inactive("synthetic-dispatch-invalid");
             runtime.route("backpacks").inactive("synthetic-dispatch-invalid");
         }
@@ -155,23 +160,5 @@ final class SophisticatedResourceExtension implements ResourcePackExtension {
         } else {
             route.inactive(missingReason);
         }
-    }
-
-    private static boolean validDispatch(
-            de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.BlockState state
-    ) {
-        if (state == null || state.getMultipart() != null) {
-            return false;
-        }
-        Variants variants = state.getVariants();
-        if (variants == null || variants.getDefaultVariant() == null) {
-            return false;
-        }
-        VariantSet set = variants.getDefaultVariant();
-        if (set.getVariants().length != 1) {
-            return false;
-        }
-        Variant variant = set.getVariants()[0];
-        return BlueMap522Adapter.isExpectedDispatch(variant);
     }
 }
