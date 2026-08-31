@@ -11,6 +11,9 @@ Version `0.1.0-alpha.2` is an unpublished BlueMap 5.23 adapter migration
 candidate for the same owner-accepted rendering scope. Version
 `0.1.0-alpha.1` remains the latest published release.
 
+The candidate production JAR is 116,914 bytes with SHA-256
+`8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab`.
+
 - All the Mons `1.2.0`, Minecraft `1.21.1`, NeoForge `21.1.248`, Java `21`;
 - BlueMap feature backport
   `5.22-feature.backport-5.23-stateless-java-web-server-46`, commit
