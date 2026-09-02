@@ -56,36 +56,22 @@
       }
     }
   },
-  "adapter_api_migration": {
-    "repository": "https://github.com/jan-guenter/bluemap-addon-adapter-api",
-    "version": "0.1.0-alpha.2",
-    "tag": "v0.1.0-alpha.2",
-    "release_target_commit": "e81f08bc4bfbf02d810ec8949a019130e2e61634",
-    "source_tree": "2f974c9bb2ba13888d69682f86f30f58922d30eb",
-    "target_bluemap_version": "5.22-feature.backport-5.23-stateless-java-web-server-46",
-    "bluemap_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
-    "bluemap_api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
-    "tested_source_commit": "02de64b6fded59d78bfb95b2a6c42b76ff98dcad",
-    "tested_source_tree": "3786f13486b49de81b2b6f941345460c36e17831",
+  "adapter_api_source": {
+    "module_repository": "https://github.com/jan-guenter/bluemap-addon-adapter-api",
+    "module_version": "0.1.0-alpha.2",
+    "module_tag": "v0.1.0-alpha.2",
+    "module_release_commit": "e81f08bc4bfbf02d810ec8949a019130e2e61634",
+    "module_source_tree": "2f974c9bb2ba13888d69682f86f30f58922d30eb",
     "compiled_source_count": 4,
     "standalone_module_jar_bundled": false,
-    "standalone_module_jar_nested": false,
-    "standalone_module_jar_installed": false,
-    "legacy_522_render_core_module_used": false,
-    "local_adapter_package": "io.github.janguenter.bluemap.sophisticated.adapter.bluemap523",
-    "displaced_local_helpers": [
-      "AdapterCompatibility",
-      "inline registry admission methods",
-      "SophisticatedResourceExtensionType",
-      "inline synthetic dispatch validation"
-    ]
+    "standalone_module_jar_installed": false
   },
   "render_core_523_migration": {
-    "repository": "https://github.com/jan-guenter/bluemap-addon-render-core",
-    "version": "0.1.0-alpha.2",
-    "tag": "v0.1.0-alpha.2",
-    "release_target_commit": "24b84efdc8235f3f1323e1a8e9fd033080e3a79e",
-    "source_tree": "424040931680fb82d37693f893ca887c0ed48eae",
+    "module_repository": "https://github.com/jan-guenter/bluemap-addon-render-core",
+    "module_version": "0.1.0-alpha.2",
+    "module_tag": "v0.1.0-alpha.2",
+    "module_release_commit": "24b84efdc8235f3f1323e1a8e9fd033080e3a79e",
+    "module_source_tree": "424040931680fb82d37693f893ca887c0ed48eae",
     "source_package": "io.github.janguenter.bluemap.addon.render.core.adapter.bluemap523",
     "bluemap_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
     "bluemap_api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
