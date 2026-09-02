@@ -2,6 +2,16 @@
 
 All notable changes will be documented here.
 
+## 0.1.0-alpha.3 - 2026-09-02
+
+- Source-bundle the BlueMap 5.23 `FaceLighting` implementation from the exact
+  `bluemap-addon-render-core` `0.1.0-alpha.2` gitlink and remove the equivalent
+  local source.
+- Add exact render-core commit/source-tree trust checks and production/source
+  archive boundaries.
+- Preserve all accepted Sophisticated profiles, gallery inputs, rendering,
+  resource admission, and stock fallback behavior.
+
 ## 0.1.0-alpha.2 - 2026-08-31
 
 - Migrate the exact runtime boundary to the sole BlueMap 5.23 feature

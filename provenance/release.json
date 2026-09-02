@@ -2,40 +2,40 @@
   "schema_version": 1,
   "status": "owner-accepted-release-candidate",
   "published": false,
-  "version": "0.1.0-alpha.2",
-  "release_date": "2026-08-31",
+  "version": "0.1.0-alpha.3",
+  "release_date": "2026-09-02",
   "repository": "https://github.com/jan-guenter/bluemap-sophisticated-addon",
-  "tag": "v0.1.0-alpha.2",
-  "maven_coordinate": "io.github.jan-guenter:bluemap-sophisticated-addon:0.1.0-alpha.2",
+  "tag": "v0.1.0-alpha.3",
+  "maven_coordinate": "io.github.jan-guenter:bluemap-sophisticated-addon:0.1.0-alpha.3",
   "candidate_artifacts": {
     "production_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.jar",
-      "size": 116914,
-      "sha256": "8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.jar",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "sources_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2-sources.jar",
-      "size": 75490,
-      "sha256": "02985e6012cb640104bc2eae2211037a4a1977fcc4a9d54c59e29886d9c737f9"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3-sources.jar",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "pom": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.pom",
-      "size": 1375,
-      "sha256": "eb038746fa5cbb8807e7b5781257930475e09508c54470e29b9679f562afcd97"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.pom",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "gradle_module": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.module.json",
-      "size": 2861,
-      "sha256": "19ffadce6d84514ae0609cc2298345509612dfa426bdd170e3e6506d9490411b"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.module.json",
+      "size": 0,
+      "sha256": "PENDING"
     }
   },
   "baseline_release": {
-    "version": "0.1.0-alpha.1",
-    "tag": "v0.1.0-alpha.1",
-    "commit": "a75b1d82c3987fa9360a1e8a5910eedf90aca7cb",
-    "tree": "f6c997921ec659d541b7dbef031434c7f61baadc",
-    "production_jar_size": 114309,
-    "production_jar_sha256": "d466d6b40fc1f51a8e045ba34631354fd181681aa8363b4f0649ec1c83227036",
+    "version": "0.1.0-alpha.2",
+    "tag": "v0.1.0-alpha.2",
+    "commit": "aeadd12f711c875c10261be5fcce57dad3d0c35b",
+    "tree": "ba82fd9a5cfcf7f488fc05fd7eeff5103b527249",
+    "production_jar_size": 116914,
+    "production_jar_sha256": "8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab",
     "owner_visual_acceptance": true,
     "release_assets": {
       "sources_jar": {
@@ -80,6 +80,21 @@
       "inline synthetic dispatch validation"
     ]
   },
+  "render_core_523_migration": {
+    "repository": "https://github.com/jan-guenter/bluemap-addon-render-core",
+    "version": "0.1.0-alpha.2",
+    "tag": "v0.1.0-alpha.2",
+    "release_target_commit": "24b84efdc8235f3f1323e1a8e9fd033080e3a79e",
+    "source_tree": "424040931680fb82d37693f893ca887c0ed48eae",
+    "source_package": "io.github.janguenter.bluemap.addon.render.core.adapter.bluemap523",
+    "bluemap_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
+    "bluemap_api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
+    "compiled_source_count": 1,
+    "removed_local_source_count": 1,
+    "standalone_module_jar_bundled": false,
+    "standalone_module_jar_installed": false,
+    "renderer_or_gallery_behavior_change": false
+  },
   "preserved_contract": {
     "routed_block_count": 65,
     "verified_stable_exterior_resource_count": 461,
@@ -93,6 +108,7 @@
   "verification": {
     "exact_input_gate": true,
     "adapter_api_gitlink_and_source_tree_gate": true,
+    "render_core_gitlink_and_source_tree_gate": true,
     "production_archive_boundary_gate": true,
     "sources_archive_boundary_gate": true,
     "exact_feature_backport_runtime_identity_gate": true,
@@ -150,24 +166,24 @@
   },
   "final_release_artifacts": {
     "production_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.jar",
-      "size": 116914,
-      "sha256": "8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.jar",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "sources_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2-sources.jar",
-      "size": 75490,
-      "sha256": "02985e6012cb640104bc2eae2211037a4a1977fcc4a9d54c59e29886d9c737f9"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3-sources.jar",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "pom": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.pom",
-      "size": 1375,
-      "sha256": "eb038746fa5cbb8807e7b5781257930475e09508c54470e29b9679f562afcd97"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.pom",
+      "size": 0,
+      "sha256": "PENDING"
     },
     "gradle_module": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.2.module.json",
-      "size": 2861,
-      "sha256": "19ffadce6d84514ae0609cc2298345509612dfa426bdd170e3e6506d9490411b"
+      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.module.json",
+      "size": 0,
+      "sha256": "PENDING"
     }
   }
 }

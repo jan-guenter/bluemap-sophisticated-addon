@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_license": "MIT",
-  "implementation_lane": "clean-room-runtime-interface-and-resource-format",
+  "implementation_lane": "clean-room-runtime-interface-and-resource-format-with-pinned-first-party-source-modules",
   "baseline": {
     "pack": "All the Mons 1.2.0",
     "pack_commit": "c7bb230f21d14d26859d0b92548f089b3a493ad9",
@@ -37,6 +37,19 @@
     "integration": "exact-gitlink-pinned-sources",
     "compiled_source_count": 4,
     "standalone_jar_bundled": false
+  },
+  "shared_render_core_module": {
+    "project": "BlueMap Add-on Render Core",
+    "repository": "https://github.com/jan-guenter/bluemap-addon-render-core",
+    "version": "0.1.0-alpha.2",
+    "tag": "v0.1.0-alpha.2",
+    "status": "released",
+    "commit": "24b84efdc8235f3f1323e1a8e9fd033080e3a79e",
+    "source_tree": "424040931680fb82d37693f893ca887c0ed48eae",
+    "declared_license": "MIT",
+    "scope": "FaceLighting and FaceLighting.Sample",
+    "integration": "exact gitlink-pinned source compiled into the consumer",
+    "artifact_bundled": false
   },
   "artifacts": {
     "sophisticatedcore": {

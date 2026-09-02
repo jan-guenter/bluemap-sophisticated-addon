@@ -15,6 +15,7 @@ import de.bluecolored.bluemap.core.util.Direction;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.util.math.Color;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
+import io.github.janguenter.bluemap.addon.render.core.adapter.bluemap523.FaceLighting;
 
 import java.util.Map;
 import java.util.function.Function;

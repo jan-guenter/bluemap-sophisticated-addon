@@ -16,6 +16,7 @@ base {
 
 sourceSets {
     main.java.srcDir 'modules/bluemap-addon-adapter-api/src/main/java'
+    main.java.srcDir 'modules/bluemap-addon-render-core/src/main/java'
 }
 
 repositories {
@@ -98,6 +99,18 @@ def sharedAdapterApiSources = [
         'ResourceExtensionType.java',
         'SyntheticDispatch.java'
 ].collect { sharedAdapterApiPackage + it }
+def sharedRenderCoreRoot =
+        'io/github/janguenter/bluemap/addon/render/core/adapter/'
+def sharedRenderCorePackage = "${sharedRenderCoreRoot}bluemap523/"
+def sharedRenderCoreClasses = [
+        "${sharedRenderCorePackage}FaceLighting.class",
+        "${sharedRenderCorePackage}FaceLighting\$Sample.class"
+].collect { it.toString() }
+def sharedRenderCoreSources = [
+        "${sharedRenderCorePackage}FaceLighting.java"
+].collect { it.toString() }
+def displacedLocalRenderCore =
+        'io/github/janguenter/bluemap/sophisticated/adapter/bluemap523/FaceLighting'
 def legacyLocalAdapterPackage =
         'io/github/janguenter/bluemap/sophisticated/adapter/bluemap522/'
 def displacedAdapterHelpers = [
@@ -130,8 +143,11 @@ tasks.register('verifyProductionJar') {
                     'META-INF/bluemap-sophisticated/upstreams.json'
             ]
             required.addAll(sharedAdapterApiClasses)
+            required.addAll(sharedRenderCoreClasses)
             def missing = required.findAll { !entries.contains(it) }
             def nonUniqueShared = sharedAdapterApiClasses.findAll { shared ->
+                entries.count { it == shared } != 1
+            } + sharedRenderCoreClasses.findAll { shared ->
                 entries.count { it == shared } != 1
             }
             def foreignClasses = entries.findAll { entry ->
@@ -140,6 +156,7 @@ tasks.register('verifyProductionJar') {
                             'io/github/janguenter/bluemap/sophisticated/'
                         )
                         && !sharedAdapterApiClasses.contains(entry)
+                        && !sharedRenderCoreClasses.contains(entry)
             }
             def addon = new groovy.json.JsonSlurper().parseText(
                     zip.getInputStream(zip.getEntry('bluemap.addon.json')).getText('UTF-8')
@@ -160,9 +177,12 @@ tasks.register('verifyProductionJar') {
                         || it.startsWith('net/minecraft/')
                         || it.startsWith('net/neoforged/')
                         || it.startsWith(legacyLocalAdapterPackage)
+                        || it.startsWith(displacedLocalRenderCore)
                         || displacedAdapterHelpers.any { helper -> it.startsWith(helper) }
                         || (it.startsWith(sharedAdapterApiPackage)
                             && !sharedAdapterApiClasses.contains(it))
+                        || (it.startsWith(sharedRenderCoreRoot)
+                            && !sharedRenderCoreClasses.contains(it))
             }
             if (!missing.isEmpty() || !nonUniqueShared.isEmpty()
                     || !foreignClasses.isEmpty() || !forbidden.isEmpty()) {
@@ -194,8 +214,11 @@ tasks.register('verifySourcesJar') {
                     'META-INF/bluemap-sophisticated/upstreams.json'
             ]
             required.addAll(sharedAdapterApiSources)
+            required.addAll(sharedRenderCoreSources)
             def missing = required.findAll { !entries.contains(it) }
             def nonUniqueShared = sharedAdapterApiSources.findAll { shared ->
+                entries.count { it == shared } != 1
+            } + sharedRenderCoreSources.findAll { shared ->
                 entries.count { it == shared } != 1
             }
             def foreignJava = entries.findAll { entry ->
@@ -204,16 +227,20 @@ tasks.register('verifySourcesJar') {
                             'io/github/janguenter/bluemap/sophisticated/'
                         )
                         && !sharedAdapterApiSources.contains(entry)
+                        && !sharedRenderCoreSources.contains(entry)
             }
             def forbidden = entries.findAll { entry ->
                 entry.endsWith('.class')
                         || entry.endsWith('.jar')
                         || entry.startsWith(legacyLocalAdapterPackage)
+                        || entry == "${displacedLocalRenderCore}.java"
                         || displacedAdapterHelpers.any { helper ->
                             entry == "${helper}.java"
                         }
                         || (entry.startsWith(sharedAdapterApiPackage)
                             && !sharedAdapterApiSources.contains(entry))
+                        || (entry.startsWith(sharedRenderCoreRoot)
+                            && !sharedRenderCoreSources.contains(entry))
             }
             if (!missing.isEmpty() || !nonUniqueShared.isEmpty()
                     || !foreignJava.isEmpty() || !forbidden.isEmpty()) {
