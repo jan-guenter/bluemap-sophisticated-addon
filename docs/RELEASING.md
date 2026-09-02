@@ -17,8 +17,9 @@ Before tagging:
    `v<addon_version>` on the reviewed commit.
 
 The tag workflow reacquires the exact three third-party inputs, verifies the
-exact detached BlueMap and Adapter API identities, runs the same authoritative
-gate, and rejects any artifact that differs from the sealed accepted bytes.
+exact detached BlueMap, Adapter API, and Render Core identities, runs the same
+authoritative gate, and rejects any artifact that differs from the sealed
+accepted bytes.
 It then creates SHA-256 checksums and publishes a GitHub prerelease plus the
 matching GitHub Packages Maven publication. The publish task reuses the
 already-built outputs and does not repeat compilation. It does not deploy to

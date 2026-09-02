@@ -12,6 +12,7 @@ not part of the root orchestration repository.
 | Minecraft / NeoForge / Java | `1.21.1` / `21.1.248` / `21` |
 | BlueMap | feature backport `5.22-feature.backport-5.23-stateless-java-web-server-46`, commit `7e07f4e74ec1e92a6ead9aa1e66054af3e133aac`, API commit `285c9a60eff3ac2b0cab308ce1058d1565be0971` |
 | BlueMap Adapter API | `0.1.0-alpha.2`, gitlink `e81f08bc4bfbf02d810ec8949a019130e2e61634`, source tree `2f974c9bb2ba13888d69682f86f30f58922d30eb` |
+| BlueMap Add-on Render Core | `0.1.0-alpha.2`, gitlink `24b84efdc8235f3f1323e1a8e9fd033080e3a79e`, source tree `424040931680fb82d37693f893ca887c0ed48eae` |
 | Sophisticated Core | `1.4.80.2194`, 1,673,669 bytes, SHA-256 `58a35e74642de9a7ffd39604f06903df39c166d332551c5770ca2e21685defc0` |
 | Sophisticated Storage | `1.5.83.2017`, 1,828,640 bytes, SHA-256 `354f62ef885b3219fb0787d211582d7ea733800ff31787cc85b9af68d260b600` |
 | Sophisticated Backpacks | `3.25.73.2027`, 1,144,235 bytes, SHA-256 `ded30f9269a92cc295ab0a735a86770ca097c30198b8f3f2288ecaac6542b93e` |
@@ -35,6 +36,8 @@ mod file is a new evidence and implementation task.
   BlueMap's original blockstate/model path atomically for that block or route.
 - The implementation is clean-room MIT. Never copy/adapt upstream
   Sophisticated source or package its classes, resources, or captures.
+- Compile `FaceLighting` only from the exact Render Core source module. Never
+  install or nest the module JAR.
 
 ## Validation policy
 
@@ -43,6 +46,9 @@ Before review, run the one authoritative gate once with the exact three input
 JARs:
 
 ```bash
+git submodule update --init --recursive -- \
+  tooling/bluemap-addon-toolkit modules/bluemap-addon-adapter-api \
+  modules/bluemap-addon-render-core
 gradle --no-daemon \
   -PbluemapSourcePath=/absolute/path/to/bluemap-backport \
   -PsophisticatedCoreJar=/absolute/path/sophisticatedcore-1.21.1-1.4.80.2194.jar \

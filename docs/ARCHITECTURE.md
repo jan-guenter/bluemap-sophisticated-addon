@@ -50,9 +50,10 @@ dynamic upstream renderers.
 ## Resource ownership
 
 The production JAR owns only its entrypoint, adapter/renderer code, the four
-exact source-compiled Adapter API primitives, synthetic dispatch blockstate,
-exact identity/profile facts, and resource path/size/hash manifests. No
-standalone Adapter API JAR is bundled or installed. BlueMap and all
+exact source-compiled Adapter API primitives, the exact source-compiled
+render-core face-light sampler, synthetic dispatch blockstate, exact
+identity/profile facts, and resource path/size/hash manifests. No standalone
+Adapter API or Render Core JAR is bundled or installed. BlueMap and all
 Minecraft/mod resources remain operator supplied. This keeps the project
 clean-room MIT despite the Sophisticated artifacts' All Rights Reserved
 declarations.

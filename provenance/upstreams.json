@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_license": "MIT",
-  "implementation_lane": "clean-room-runtime-interface-and-resource-format",
+  "implementation_lane": "clean-room-runtime-interface-and-resource-format-with-pinned-first-party-source-modules",
   "baseline": {
     "pack": "All the Mons 1.2.0",
     "pack_commit": "c7bb230f21d14d26859d0b92548f089b3a493ad9",
@@ -10,13 +10,13 @@
     "java": 21
   },
   "accepted_release": {
-    "version": "0.1.0-alpha.1",
-    "date": "2026-08-12",
-    "tag": "v0.1.0-alpha.1",
-    "commit": "a75b1d82c3987fa9360a1e8a5910eedf90aca7cb",
-    "tree": "f6c997921ec659d541b7dbef031434c7f61baadc",
-    "production_jar_size": 114309,
-    "production_jar_sha256": "d466d6b40fc1f51a8e045ba34631354fd181681aa8363b4f0649ec1c83227036",
+    "version": "0.1.0-alpha.2",
+    "date": "2026-08-31",
+    "tag": "v0.1.0-alpha.2",
+    "commit": "aeadd12f711c875c10261be5fcce57dad3d0c35b",
+    "tree": "ba82fd9a5cfcf7f488fc05fd7eeff5103b527249",
+    "production_jar_size": 116914,
+    "production_jar_sha256": "8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab",
     "owner_visual_acceptance": true
   },
   "bluemap": {
@@ -37,6 +37,19 @@
     "integration": "exact-gitlink-pinned-sources",
     "compiled_source_count": 4,
     "standalone_jar_bundled": false
+  },
+  "shared_render_core_module": {
+    "project": "BlueMap Add-on Render Core",
+    "repository": "https://github.com/jan-guenter/bluemap-addon-render-core",
+    "version": "0.1.0-alpha.2",
+    "tag": "v0.1.0-alpha.2",
+    "status": "released",
+    "commit": "24b84efdc8235f3f1323e1a8e9fd033080e3a79e",
+    "source_tree": "424040931680fb82d37693f893ca887c0ed48eae",
+    "declared_license": "MIT",
+    "scope": "FaceLighting and FaceLighting.Sample",
+    "integration": "exact gitlink-pinned source compiled into the consumer",
+    "artifact_bundled": false
   },
   "artifacts": {
     "sophisticatedcore": {

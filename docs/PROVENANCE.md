@@ -11,6 +11,12 @@ compiled from gitlink `e81f08bc4bfbf02d810ec8949a019130e2e61634` and source
 tree `2f974c9bb2ba13888d69682f86f30f58922d30eb`; the settings preflight rejects
 an uninitialized, changed, dirty, or mismatched module checkout.
 
+The face-light sampler is compiled from Render Core `0.1.0-alpha.2`, gitlink
+`24b84efdc8235f3f1323e1a8e9fd033080e3a79e`, source tree
+`424040931680fb82d37693f893ca887c0ed48eae`. The same settings preflight and
+archive-boundary rules reject a missing, dirty, mismatched, duplicate, legacy,
+or unexpected render-core source/class.
+
 The All the Mons 1.2.0 export and server runtime ledger establish the exact
 filenames, project/file IDs, sizes, SHA-1 values, and pack baseline. Each of
 the three runtime JARs was independently acquired and measured for SHA-256

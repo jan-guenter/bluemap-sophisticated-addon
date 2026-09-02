@@ -7,12 +7,14 @@ appearance of Sophisticated Storage and Sophisticated Backpacks.
 
 ## Status and compatibility
 
-Version `0.1.0-alpha.2` is an unpublished BlueMap 5.23 adapter migration
-candidate for the same owner-accepted rendering scope. Version
-`0.1.0-alpha.1` remains the latest published release.
+Version `0.1.0-alpha.3` is a source-consolidation candidate for the same
+owner-accepted rendering scope. Version `0.1.0-alpha.2` remains the latest
+published release.
 
-The candidate production JAR is 116,914 bytes with SHA-256
-`8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab`.
+The candidate production JAR is 118,181 bytes with SHA-256
+`c91ae67275be1bb2e343170b4f800420721c128bed8292b24c4432d65ebdb1ca`.
+It replaces one byte-equivalent local face-light helper with the exact
+first-party shared source.
 
 - All the Mons `1.2.0`, Minecraft `1.21.1`, NeoForge `21.1.248`, Java `21`;
 - BlueMap feature backport
@@ -28,6 +30,12 @@ commit `e81f08bc4bfbf02d810ec8949a019130e2e61634` and source tree
 `2f974c9bb2ba13888d69682f86f30f58922d30eb`. It does not bundle or install a
 standalone Adapter API JAR. Renderer, profile, resource, gallery, and stock
 fallback behavior remain local and unchanged.
+
+It also compiles `FaceLighting` from `bluemap-addon-render-core`
+`0.1.0-alpha.2`, commit
+`24b84efdc8235f3f1323e1a8e9fd033080e3a79e`, source tree
+`424040931680fb82d37693f893ca887c0ed48eae`. No standalone module JAR is
+bundled or installed.
 
 The runtime checks exact JAR sizes and SHA-256 hashes. A same-named or
 same-version file with different bytes stays inactive. Storage and Backpacks
@@ -60,6 +68,9 @@ BlueMap checkout. Supply the exact three operator-downloaded JARs to the
 single authoritative gate:
 
 ```bash
+git submodule update --init --recursive -- \
+  tooling/bluemap-addon-toolkit modules/bluemap-addon-adapter-api \
+  modules/bluemap-addon-render-core
 gradle --no-daemon \
   -PbluemapSourcePath=/absolute/path/to/bluemap-backport \
   -PsophisticatedCoreJar=/absolute/path/sophisticatedcore-1.21.1-1.4.80.2194.jar \
