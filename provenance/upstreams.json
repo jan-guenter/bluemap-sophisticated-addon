@@ -10,13 +10,13 @@
     "java": 21
   },
   "accepted_release": {
-    "version": "0.1.0-alpha.1",
-    "date": "2026-08-12",
-    "tag": "v0.1.0-alpha.1",
-    "commit": "a75b1d82c3987fa9360a1e8a5910eedf90aca7cb",
-    "tree": "f6c997921ec659d541b7dbef031434c7f61baadc",
-    "production_jar_size": 114309,
-    "production_jar_sha256": "d466d6b40fc1f51a8e045ba34631354fd181681aa8363b4f0649ec1c83227036",
+    "version": "0.1.0-alpha.2",
+    "date": "2026-08-31",
+    "tag": "v0.1.0-alpha.2",
+    "commit": "aeadd12f711c875c10261be5fcce57dad3d0c35b",
+    "tree": "ba82fd9a5cfcf7f488fc05fd7eeff5103b527249",
+    "production_jar_size": 116914,
+    "production_jar_sha256": "8d434eff624a831ac1327e9b17347fa6b4325c02a001be418fe6593b6c300dab",
     "owner_visual_acceptance": true
   },
   "bluemap": {

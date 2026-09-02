@@ -10,23 +10,23 @@
   "candidate_artifacts": {
     "production_jar": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.jar",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 118181,
+      "sha256": "c91ae67275be1bb2e343170b4f800420721c128bed8292b24c4432d65ebdb1ca"
     },
     "sources_jar": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3-sources.jar",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 76764,
+      "sha256": "c20d558efe8365a64b2f5d639a263b02ffac8dc9121629ea31f433eff2338d3f"
     },
     "pom": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.pom",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 1375,
+      "sha256": "9958e23b10869253db8bf859b66f9c96d4ecc61bda04e6f2239240498ce5d90a"
     },
     "gradle_module": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.module.json",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 2861,
+      "sha256": "c148e90025bb34a03b7d5633decef3cdc6e4b0753e41dc692a7db36b15aef98e"
     }
   },
   "baseline_release": {
@@ -39,20 +39,20 @@
     "owner_visual_acceptance": true,
     "release_assets": {
       "sources_jar": {
-        "size": 72951,
-        "sha256": "7c99607ecd26033de08814cf10dd298623cc3c919893e5e1a6efc83180cedbdc"
+        "size": 75490,
+        "sha256": "02985e6012cb640104bc2eae2211037a4a1977fcc4a9d54c59e29886d9c737f9"
       },
       "pom": {
         "size": 1375,
-        "sha256": "8219774bae3cdba98cd30f2d0de379048e1ddf9fb5d865985648622cd215be9d"
+        "sha256": "eb038746fa5cbb8807e7b5781257930475e09508c54470e29b9679f562afcd97"
       },
       "gradle_module": {
         "size": 2861,
-        "sha256": "110ed34f47341944e1ee14091f58187137d412a3a4ee64630081cbd80eae6e9d"
+        "sha256": "19ffadce6d84514ae0609cc2298345509612dfa426bdd170e3e6506d9490411b"
       },
       "sha256sums": {
         "size": 472,
-        "sha256": "92701c907fa0eb87a9cbe18dde2b9da944f7e738fbc8a6d589a34ebfd8c9605c"
+        "sha256": "7dd2ad10b422df3900df57b367ea202fdc168a4e076bd30b5ea29f200c9829e8"
       }
     }
   },
@@ -93,7 +93,25 @@
     "removed_local_source_count": 1,
     "standalone_module_jar_bundled": false,
     "standalone_module_jar_installed": false,
-    "renderer_or_gallery_behavior_change": false
+    "renderer_or_gallery_behavior_change": false,
+    "normalized_source_parity": true,
+    "normalized_bytecode_parity": true,
+    "production_archive": {
+      "old_entries": 45,
+      "new_entries": 45,
+      "unchanged_entries": 36,
+      "changed_common_entries": 7,
+      "removed_local_classes": 2,
+      "added_shared_classes": 2
+    },
+    "sources_archive": {
+      "old_entries": 39,
+      "new_entries": 39,
+      "unchanged_entries": 33,
+      "changed_common_entries": 5,
+      "removed_local_sources": 1,
+      "added_shared_sources": 1
+    }
   },
   "preserved_contract": {
     "routed_block_count": 65,
@@ -167,23 +185,23 @@
   "final_release_artifacts": {
     "production_jar": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.jar",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 118181,
+      "sha256": "c91ae67275be1bb2e343170b4f800420721c128bed8292b24c4432d65ebdb1ca"
     },
     "sources_jar": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3-sources.jar",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 76764,
+      "sha256": "c20d558efe8365a64b2f5d639a263b02ffac8dc9121629ea31f433eff2338d3f"
     },
     "pom": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.pom",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 1375,
+      "sha256": "9958e23b10869253db8bf859b66f9c96d4ecc61bda04e6f2239240498ce5d90a"
     },
     "gradle_module": {
       "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.module.json",
-      "size": 0,
-      "sha256": "PENDING"
+      "size": 2861,
+      "sha256": "c148e90025bb34a03b7d5633decef3cdc6e4b0753e41dc692a7db36b15aef98e"
     }
   }
 }

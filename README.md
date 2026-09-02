@@ -11,9 +11,10 @@ Version `0.1.0-alpha.3` is a source-consolidation candidate for the same
 owner-accepted rendering scope. Version `0.1.0-alpha.2` remains the latest
 published release.
 
-The candidate replaces one byte-equivalent local face-light helper with the
-exact first-party shared source. Its artifact identity is sealed after the
-reproducible build gate.
+The candidate production JAR is 118,181 bytes with SHA-256
+`c91ae67275be1bb2e343170b4f800420721c128bed8292b24c4432d65ebdb1ca`.
+It replaces one byte-equivalent local face-light helper with the exact
+first-party shared source.
 
 - All the Mons `1.2.0`, Minecraft `1.21.1`, NeoForge `21.1.248`, Java `21`;
 - BlueMap feature backport
