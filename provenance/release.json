@@ -7,28 +7,6 @@
   "repository": "https://github.com/jan-guenter/bluemap-sophisticated-addon",
   "tag": "v0.1.0-alpha.3",
   "maven_coordinate": "io.github.jan-guenter:bluemap-sophisticated-addon:0.1.0-alpha.3",
-  "candidate_artifacts": {
-    "production_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.jar",
-      "size": 118181,
-      "sha256": "c91ae67275be1bb2e343170b4f800420721c128bed8292b24c4432d65ebdb1ca"
-    },
-    "sources_jar": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3-sources.jar",
-      "size": 76764,
-      "sha256": "c20d558efe8365a64b2f5d639a263b02ffac8dc9121629ea31f433eff2338d3f"
-    },
-    "pom": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.pom",
-      "size": 1375,
-      "sha256": "9958e23b10869253db8bf859b66f9c96d4ecc61bda04e6f2239240498ce5d90a"
-    },
-    "gradle_module": {
-      "file_name": "bluemap-sophisticated-addon-0.1.0-alpha.3.module.json",
-      "size": 2861,
-      "sha256": "c148e90025bb34a03b7d5633decef3cdc6e4b0753e41dc692a7db36b15aef98e"
-    }
-  },
   "baseline_release": {
     "version": "0.1.0-alpha.2",
     "tag": "v0.1.0-alpha.2",
